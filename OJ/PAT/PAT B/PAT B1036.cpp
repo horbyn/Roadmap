@@ -1,26 +1,29 @@
 /* access:
  * https://pintia.cn/problem-sets/994805260223102976/problems/994805285812551680
- * result: PA 11/15
- * duration: 23 mins
+ * result: AC
+ * duration: 23 mins + 5 mins
  */
 
 #include <cstdio>
+#include <cmath>
 
 int main() {
-    int inp;
+    double inp;
+    int line, col;
     char ch;
     int i, j;
 
     // input module
-    scanf("%d %c", &inp, &ch);
+    scanf("%lf %c", &inp, &ch);
 
     // calculate module
-    
+    line = round(inp / 2);
+    col = (int)inp;
 
     // output module
-    for (i = 0; i < inp / 2; i++) {
-        for (j = 0; j < inp; j++) {
-            if (i == 0 || i == inp / 2 - 1 || j == 0 || j == inp - 1) {
+    for (i = 0; i < line; i++) {
+        for (j = 0; j < col; j++) {
+            if (i == 0 || i == line - 1 || j == 0 || j == col - 1) {
                 printf("%c", ch);
             }
             else {
@@ -32,13 +35,3 @@ int main() {
 
     return 0;
 }
-
-/*
-Fst submit:
-Case	Result	        Run Time	Memory
-0       Accepted        4 ms	    228 KB
-1       Wrong Answer    2 ms	    296 KB
-2       Wrong Answer    3 ms	    568 KB
-3       Accepted        3 ms	    500 KB
-4       Accepted        3 ms	    256 KB
-*/

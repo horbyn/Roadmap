@@ -23,8 +23,6 @@
 
 #include <cstdio>
 
-#pragma warning(disable: 4996)
-
 #define MAXSIZE 80
 
 int main() {
