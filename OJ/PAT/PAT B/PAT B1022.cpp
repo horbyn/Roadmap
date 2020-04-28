@@ -17,8 +17,6 @@
 
 #include <cstdio>
 
-#pragma warning(disable: 4996)
-
 #define MAXSIZE 32
 
 static int buf_ptr = 0;
