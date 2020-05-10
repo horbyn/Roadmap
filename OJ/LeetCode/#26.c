@@ -8,9 +8,19 @@
  * 6、重复第1步直到到达数组末尾
  */
 
+/* EXAMPLE:
+ * 0, 0, 1, 1, 1, 2, 2, 3, 3
+ * i----->j不同
+ *       i-------->j不同
+ *                i----->j不同
+ *                      i-->不满足(j < numsSize退出)
+ */
+
 int removeDuplicates(int* nums, int numsSize){
     int i = 0, j = i + 1;
     int nr = 1;
+
+    if(!numsSize)    return 0;
 
     while(j < numsSize){
         if(nums[j] != nums[i]){
