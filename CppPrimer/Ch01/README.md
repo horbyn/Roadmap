@@ -31,7 +31,7 @@ Hello, World
 > Our program used the addition operator, +, to add two numbers. Write a program that uses the multiplication operator, *, to print the product instead.
 ```shell
 root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_4 ex1_4.cpp
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch01$ ./ex1_4
+root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_4
 Enter two numbers:
 3 7
 The product of 3 and 7 is 21
@@ -41,7 +41,7 @@ The product of 3 and 7 is 21
 > We wrote the output in one large statement. Rewrite the program to use a separate statement to print each operand.
 ```shell
 root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_5 ex1_5.cpp
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch01$ ./ex1_5
+root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_5
 Enter two numbers:
 3 7
 The product of 3 and 7 is 21
