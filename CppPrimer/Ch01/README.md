@@ -54,7 +54,7 @@ The product of 3 and 7 is 21
 &#8195;&#8195;&#8195;&#8195;&#8195;<< " is " << v1 + v2 << std::endl;  
 If the program is legal, what does it do? If the program is not legal, why not? How would you fix it?
 ```cpp
-    //Illegal, the left-hand operand of the << operator is not ostream object
+    //Illegal, the left-hand operand of the << operator is not ostream object.
 ```
 
 ## Exercise 1.7
@@ -154,7 +154,7 @@ root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_12
 ## Exercise 1.13
 > Rewrite the exercises from $1.4.1 (p. 13) using *for* loops.
 ```cpp
-    // Take Exercise 1.11 as an example
+    // Take Exercise 1.11 as an example.
 ```
 ```shell
 root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_11 ex1_11.cpp
@@ -166,13 +166,13 @@ Please input two number in order to print each number in the range specified by 
 ## Exercise 1.14
 > Compare and contrast the loops that used a *for* with those using a *while*. Are these advantages or disadvantages to using either form?
 ```cpp
-    // for() is used for explicit cycle; while() is used for unexplicit cycle
+    // for() is used for explicit cycle; while() is used for unexplicit cycle.
 ```
 
 ## Exercise 1.15
 > Write programs that contain the common errors discussed in the box on page 16. Familiarize yourself with the messages the compiler generates.
 ```cpp
-    // Declaration errors: cout not defined
+    // Declaration errors: cout not defined.
 ```
 ```shell
 root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_15 ex1_15.cpp
@@ -199,7 +199,7 @@ The sum of these number you input is 104
 ## Exercise 1.17
 > What happens in the program presented in this section if the input values are all equal? What if there are no duplicated values?
 ```cpp
-    // The former is that all the output are in one line; the latter is that all the input have its corresponding line of output
+    // The former is that all the output are in one line; the latter is that all the input have its corresponding line of output.
 ```
 
 ## Exercise 1.18
@@ -222,5 +222,62 @@ root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_18
 ## Exercise 1.19
 > Revise the program you wrote for the exercises in $1.4.1 (p.13) that printed a range of numbers so that it handles input in which the first number is smaller than the second.
 ```cpp
-    // Do as Exercise 1.11(or 1.13) do
+    // Do it like Exercise 1.11(or 1.13).
+```
+
+## Exercise 1.20
+> http://www.informit.com/title/0321714113 contains a copy of *Sales_item.h* in the Chapter 1 code directory. Copy that file to your working directory. Use it to write a program that reads a set of book sales transactions, writing each transaction to the standard output.
+```shell
+root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_20 ex1_20.cpp
+root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_20 <ex1_20_infile
+0-201-70353-X 4 99.96 24.99
+0-201-82470-1 4 181.56 45.39
+0-201-88954-4 2 30 15
+0-201-88954-4 5 60 12
+0-201-88954-4 7 84 12
+0-201-88954-4 2 24 12
+0-399-82477-1 2 90.78 45.39
+0-399-82477-1 3 136.17 45.39
+0-201-78345-X 3 60 20
+0-201-78345-X 2 50 25
+```
+
+## Exercise 1.21
+> Write a program that reads two *Sales_item* objects that have the same ISBN and produces their sum.
+```shell
+root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_21 ex1_21.cpp
+root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_21 <ex1_21_infile
+0-201-78345-X 5 110 22
+```
+
+## Exercise 1.22
+> Write a program that reads several transactions for the same ISBN. Write the sum of all the transactions that were read.
+```shell
+root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_22 ex1_22.cpp
+root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_22 <ex1_22_infile
+0-201-88954-4 16 198 12.375
+```
+
+## Exercise 1.23
+> Write a program that reads several transactions and counts how many transactions occur for each ISBN.
+```shell
+root@localhost:/mnt/CppPrimer/Ch01$ g++ -o ex1_23 ex1_23.cpp
+root@localhost:/mnt/CppPrimer/Ch01$ ./ex1_23 <ex1_20_infile
+Transaction of 0-201-70353-X is 1
+Transaction of 0-201-82470-1 is 1
+Transaction of 0-201-88954-4 is 4
+Transaction of 0-399-82477-1 is 2
+Transaction of 0-201-78345-X is 2
+```
+
+## Exercise 1.24
+> Test the previous program by giving multiple transactions representing multiple ISBNs. The records for each ISBN should be grouped together.
+```cpp
+    // Do it like Exercise 1.23.
+```
+
+## Exercise 1.25
+> Using the *Sales_item.h* header from the Web site, compile and execute the bookstore program presented in this section.
+```cpp
+    // Do it like the code of this section.
 ```
