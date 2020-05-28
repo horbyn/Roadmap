@@ -89,3 +89,30 @@ root@localhost:/mnt/CppPrimer/Ch02$ ./ex2_8
 2	M
 
 ```
+
+## Exercise 2.9
+> Explain the following definitions. For those that are illegal, explain what's wrong and how to correct it.  
+> &#8195;&#8195;(a) std::cin >> int input_value;&#8195;&#8195;(b) int i = { 3.14 };  
+> &#8195;&#8195;(c) double salary = wage = 9999.99;&#8195;&#8195;(d) int i = 3.14;
+```cpp
+    // (a) I can't..
+    // (b) 3.14 will be truncated. List Initialization will not allow this initialization.
+    // (c) wage is not initialized.
+    // (d) I can't..
+```
+
+## Exercise 2.10
+> What are the initial values, if any, of each of the following variables?
+> ```cpp
+> std::string global_str;
+> int global_int;
+> int main()
+> {
+>     int local_int;
+>     std::string local_str;
+> }
+> ```
+```cpp
+    // global_str is a empty string;        global_int = 0;
+    // local_str is uninitialized;          local_int is uninitialized;
+```
