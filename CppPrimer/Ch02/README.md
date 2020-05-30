@@ -198,3 +198,88 @@ root@localhost:/mnt/CppPrimer/Ch02$ ./ex2_8
 ```cpp
     // 10 10
 ```
+
+## Exercise 2.18
+> Write code to change the value of a pointer. Write code to change the value to which the pointer points.
+```shell
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch02$ g++ ex2_18.cpp -o ex2_18
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch02$ ./ex2_18
+The value of the pointer before changing is 0x7ffd2972c3ac
+The value of the pointer after changing is 0
+The value to which the pointer points before changing is 0
+The value to which the pointer points after changing is 5
+```
+
+## Exercise 2.19
+> Explain the key differences between pointers and references.
+```cpp
+    // References must be initialized, but pointers must not.
+    // References can not reassigned, but pointers can be assigned or copied. 
+```
+
+## Exercise 2.20
+> What does the following program do?
+> ```cpp
+>     int i = 42;
+>     int *p1 = &i;
+>     *p1 = *p1 * *p1;
+> ```
+```cpp
+    // Calculate 42 * 42
+```
+
+## Exercise 2.21
+> Explain each of the following definitions. Indicate whether any are illegal and, if so, why.
+> &#8195;int i = 0;  
+> &#8195;(a) double *dp = &i;&#8195;&#8195;(b) int *ip = i;&#8195;&#8195;(c) int *p = &i;
+```cpp
+    // (a) Illegal, an int is assigned to a double type pointer.
+    // (b) Illegal, cannot assign an int to a pointer.
+```
+
+## Exercise 2.22
+> Assuming *p* is a pointer to *int*, explain the following code:
+> ```cpp
+> if (p) // ...
+> if (*p) // ...
+> ```
+```cpp
+    // Check whether this pointer is a valid one.
+    // Check whether the value the pointer points is a nonzero.
+```
+
+## Exercise 2.23
+> Given a pinter *p*, can you determine whether *p* points to a valid object? If so, how? If not, why not?
+```cpp
+    // Sure. Test whether the pointer is nullptr.
+```
+
+## Exercise 2.24
+> Why is the initialization of *p* legal but that of *lp* illegal?  
+> &#8195;int i = 42;&#8195;&#8195;void *p = &i;&#8195;&#8195;long *lp = &i;
+```cpp
+    // void *pointer can hold the address of any object
+```
+
+## Exercise 2.25
+> Determine the types and values of each of the following variables.  
+> &#8195;(a) int *ip, i, &r = i;&#8195;&#8195;(b) int i, *ip = 0;&#8195;&#8195;(c) int *ip, ip2;
+```cpp
+    // (a) ip: Type is int * pointer, value is nullptr;
+    //     i: Type is int, value is undefined;
+    //     r: Type is int reference, value is underfined;
+    // (b) i: Type is int, value is undefined;
+    //     ip: Type is int * pointer, value is nullptr;
+    // (c) ip: Type is int * pointer, value is undefined;
+    //     ip2: Type is int, value is undefined;
+```
+
+## Exercise 2.26
+> Which of the following are legal? For those that are illegal, explain why.  
+> &#8195;(a) const int buf;&#8195;&#8195;(b) int cnt = 0;&#8195;&#8195;(c) const int sz = cnt;*#8195;&#8195;(d) ++cnt; ++sz;
+```cpp
+    // (a) Illegal, const variable must initialize while it is created.
+    // (b) Legal.
+    // (c) Legal.
+    // (d) Illegal, const variable cannot be reassigned.
+```
