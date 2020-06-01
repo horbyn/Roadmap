@@ -283,3 +283,81 @@ The value to which the pointer points after changing is 5
     // (c) Legal.
     // (d) Illegal, const variable cannot be reassigned.
 ```
+
+## Exercise 2.27
+> Which of the following initializations are legal? Explain why.
+> ```shell
+>   (a) int i = -1, &r = 0;             (b) int *const p2 = &i2;
+>   (c) const int i = -1, &r = 0;       (d) const int *const p3 = &i2;
+>   (e) const int *p1 = &i2;            (f) const int &const r2;
+>   (g) const int i2 = i, &r = i;
+> ```
+```cpp
+    // (a) Illegal, initial value of reference to nonconst must be a lvalue.
+    // (b) Legal only when i2 is a variable of int but illegal otherwise.
+    // (c) Legal, initial value of reference to const can be a rvalue.
+    // (d) Legal only when i2 is a variable of const int but illegal otherwise.
+    // (e) Legal only when i2 is a variable of const int but illegal otherwise.
+    // (f) Illegal, initializer must be set while a reference was created. 
+    // (g) Legal, initial value of reference to const can be a lvalue.
+```
+
+## Exercise 2.28
+> Explain the following definitions. Identify any that are illegal.
+> ```shell
+>   (a) int i, *const cp;               (b) int *p1, *const p2;
+>   (c) const int ic, &r = ic;          (d) const int *const p3;
+>   (e) const int *p;
+> ```
+```cpp
+    // All legal.
+```
+
+## Exercise 2.29
+> Using the variables in the previous exercise, which of the following assignments are legal? Explain why?
+> ```shell
+>   (a) i = ic;                         (b) p1 = p3;
+>   (c) p1 = &ic;                       (d) p3 = &ic;
+>   (e) p2 = p1;                        (f) ic = *p3;
+> ```
+```cpp
+    // (d) Const int pointer points to a const int object.
+    // (e) Int pointer assigns to a int pointer.
+    // (f) Const int assigns to a const int object.
+```
+
+## Exercise 2.30
+> For each of the following declarations indicate whether the object being declared has top-level or low-level const.
+> ```shell
+>   const int v2 = 0;       int v1 = v2;
+>   int *p1 = &v1, &r1 = v1;
+>   const int *p2 = &v2, *const p3 = &i, &r2 = v2;
+> ```
+```cpp
+    // "const int v2 = 0;": Const is top-level.
+    // "const int *p2 = &v2": Const is low-level.
+    // "const int *const p3 = &i": Left-most const is low-level while right-most is top-level.
+    // "const int &r2 = v2": Const is low-level.
+```
+
+## Exercise 2.31
+> Given the declarations in the previous exercise determine whether the following assignments are legal. Explain how the top-level or low-level *const* applies in each case.
+> ```shell
+>   r1 = v2;
+>   p1 = p2;    p2 = p1;
+>   p1 = p3;    p2 = p3;
+> ```
+```cpp
+    // "p2 = p1" is legal. p1 will convert a const int object that is a temporary first, then that temporary is assigned to p2.
+    // "p2 = p3" is legal. p2 and p3 are both const int type.
+```
+
+## Exercise 2.32
+> Is the following code legal or not? If not, how might you make it legal?
+> ```shell
+>     int null = 0, *p = null;
+> ```
+```cpp
+    // Illegal, because null is 'int' while p is 'int *'.
+    // Should be revised: "int = 0, *p = &null;"
+```
