@@ -202,8 +202,8 @@ root@localhost:/mnt/CppPrimer/Ch02$ ./ex2_8
 ## Exercise 2.18
 > Write code to change the value of a pointer. Write code to change the value to which the pointer points.
 ```shell
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch02$ g++ ex2_18.cpp -o ex2_18
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch02$ ./ex2_18
+root@localhost:/mnt/CppPrimer/Ch02$ g++ ex2_18.cpp -o ex2_18
+root@localhost:/mnt/CppPrimer/Ch02$ ./ex2_18
 The value of the pointer before changing is 0x7ffd2972c3ac
 The value of the pointer after changing is 0
 The value to which the pointer points before changing is 0
@@ -360,4 +360,61 @@ The value to which the pointer points after changing is 5
 ```cpp
     // Illegal, because null is 'int' while p is 'int *'.
     // Should be revised: "int = 0, *p = &null;"
+```
+
+## Exercise 2.33
+> Using the variable definitions from this section, determine what happens in each of these assignments:
+> ```shell
+>     a = 42;    b = 42;    c = 42;
+>     d = 42;    e = 42;    g = 42;
+> ```
+```cpp
+    // "a = 42;" is legal.
+    // "b = 42;" is legal.
+    // "c = 42;" is legal.
+    // "d = 42;" is illegal, because it's invalid from 'int' to 'int *'
+    // "e = 42;" is illegal, because it's invalid from 'int' to 'const int *'
+    // "g = 42;" is illegal, because it's invalid to assign to 'const int&'
+```
+
+## Exercise 2.34
+> Write a program containing the variables and assignments from the previous exercise. Print the variables before and after the assignments to chexk whether your predictions in the previous exercise were correct. If not, study the examples until you can convince yourself you know what led you to the wrong conclusion.
+```shell
+root@localhost:/mnt/CppPrimer/Ch02$ g++ ex2_34.cpp -o ex2_34
+ex2_34.cpp: In function ‘int main()’:
+ex2_34.cpp:29:9: error: invalid conversion from ‘int’ to ‘int*’ [-fpermissive]
+     d = 42;
+         ^~
+ex2_34.cpp:35:9: error: invalid conversion from ‘int’ to ‘const int*’ [-fpermissive]
+     e = 42;
+         ^~
+ex2_34.cpp:41:9: error: assignment of read-only reference ‘g’
+     g = 42;
+         ^~
+```
+
+## Exercise 2.35
+> Determine the types deduced in each of the following definitions. Once you've figured out the types, write a program to see whether you were correct.
+> ```cpp
+>     const int i = 42;
+>     auto j = i; const auto &k = i; auto *p = &i;
+>     const auto j2 = i, &k2 = i;
+> ```
+```cpp
+    /* My solution is different with textbook's; I can't */
+
+    // j is int.
+    // k is const int &.
+    // p is const int *.
+    // j2 is const int.
+    // k2 is const int &.
+```
+```shell
+root@localhost:/mnt/CppPrimer/Ch02$ g++ ex2_35.cpp -o ex2_35
+root@localhost:/mnt/CppPrimer/Ch02$ ./ex2_35
+i
+i
+PKi
+i
+i
 ```
