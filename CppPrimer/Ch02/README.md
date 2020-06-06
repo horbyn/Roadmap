@@ -418,3 +418,78 @@ PKi
 i
 i
 ```
+
+## Exercise 2.36
+> In the following code, determine the type of each variable and the value each variable has when the code finishes:
+> ```cpp
+>     int a = 3, b = 4;
+>     decltype(a) c = a;
+>     decltype((b)) d = a;
+>     ++c;
+>     ++d;
+> ```
+```cpp
+    // c: Type is int, and value is 4.
+    // d: Type is int &, and value is 4.
+```
+
+## Exercise 2.37
+> Assignment is an example of an expression that yields a reference type. The type is a reference to the type of the left-hand operand. That is, if *i* is an *int*, then the type of the expression *i = x* is *int &*. Using that knowledge, determine the type and value of each variable in this code:
+> ```cpp
+>     int a = 3, b = 4;
+>     decltype(a) c = a;
+>     decltype(a = b) d = a;
+> ```
+```cpp
+    // c: Type is int, and value is 3.
+    // d: Type is int &, and value is 3.
+```
+
+## Exercise 2.38
+> Describe the differences in type deduction between *decltype* and *auto*. Give an example of an expression where *auto* and *decltype* will deduce the same type and an example where they will deduce differing types.
+```cpp
+    // Differences: decltype includes top-level const but auto ignores.
+
+    // Same deduction: b and c is 'int'.
+    int a = 1;
+    auto b = a;
+    decltype(a) c;
+
+    // Different deduction: e is 'int' while f is 'const int'
+    const int d = 1;
+    auto e = d;
+    decltype(d) f = 1;
+```
+
+## Exercise 2.39
+> Compile the following program to see what happens when you forget the semicolon after a class definition. Remember the message for future reference.
+> ```cpp
+>     struct Foo { /* empty */ } // Note: no semicolon
+>     int main()
+>     {
+>         return 0;
+>     }
+> ```
+```shell
+root@localhost:/mnt/CppPrimer/Ch02$ g++ ex2_39.cpp -o ex2_39
+ex2_39.cpp: In function ‘int main()’:
+ex2_39.cpp:4:31: error: expected ‘;’ after struct definition
+     struct Foo { /* empty */ } // Note: no semicolon
+                               ^
+                               ;
+ex2_39.cpp:6:5: error: a function-definition is not allowed here before ‘{’ token
+     {
+     ^
+```
+
+## Exercise 2.41
+> Use your *Sales_data* class to rewrite the exercises in $1.5.1 (p. 22), $1.5.2 (p. 24), and $1.6 (p.25). For now, you should define your *Sales_data* class in the same file as your *main* funciont.
+```cpp
+    // pass ;-(
+```
+
+## Exercise 2.42
+> Write your own version of the *Sales_data.h* header and use it to rewrite the exercise from $2.6.2 (p. 76).
+```cpp
+    // pass ;-(
+```
