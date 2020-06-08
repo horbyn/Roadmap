@@ -258,3 +258,102 @@ Enter "RETURN" then "CTRL + D" to exit input
 Enter "RETURN" then "CTRL + D" to exit input
 11 11 11 11 11 11 11 11 11 11
 ```
+
+## Exercise 3.21
+> Redo the first exercise from $3.3.3 (p. 105) using iterators.
+```shell
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_21_copy_ex3_16.cpp -o ex3_21_copy_ex3_16
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_21_copy_ex3_16
+(a) 0; 
+(b) 10; 0000000000
+(c) 10; 42424242424242424242
+(d) 1; 10
+(e) 2; 1042
+(f) 10; 
+(g) 10; hihihihihihihihihihi
+```
+
+## Exercise 3.22
+> Revise the loop that printed the first paragraph in *text* to instead change the elements in *text* that correspond to the first paragraph to all uppercase. After you've updated *text*, print its contents.
+```shell
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_22.cpp -o ex3_22
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_22
+Enter "RETURN" then "CTRL + D" to exit input
+    I am a bird. I like the sky.
+
+    I don't like lake.
+    I AM A BIRD. I LIKE THE SKY.
+```
+
+## Exercise 3.23
+> Write a program to create a *vector* with ten *int* elements. Using an iterator, assign each element a value that is twice its current value. Test your program by printing the *vector*.
+```shell
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_23.cpp -o ex3_23
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_23
+Enter "RETURN" then "CTRL + D" to exit input
+0 1 2 3 4 5 6 7 8 9
+024681012141618
+```
+
+## Exercise 3.24
+> Redo the last exercise from $3.3.3 (p. 105) using iterators.
+```shell
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_24_copy_ex3_20.cpp -o ex3_24_copy_ex3_20
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_24_copy_ex3_20
+Enter "RETURN" then "CTRL + D" to exit input
+1 2 3 4 5 6 7 8 9 10
+3 5 7 9 11 13 15 17 19 
+Enter "RETURN" then "CTRL + D" to exit input
+11 11 11 11 11
+```
+
+## Exercise 3.25
+> Rewrite the grade clustering program from $3.3.3 (p. 104) using iterators instead of subscripts.
+```shell
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_25.cpp -o ex3_25
+hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_25
+Enter "RETURN" then "CTRL + D" to exit input
+42 65 95 100 39 67 95 76 88 76 83 92 76 93
+0 0 0 1 1 0 2 3 2 4 1
+```
+
+## Exercise 3.26
+> In the binary search program on page 112, why did we write *mid = beg + (end - beg) / 2*; instead of *mid = (beg + end) / 2*;?
+```cpp
+    // No addition operation to a iterator and another iterator.
+```
+
+## Exercise 3.27
+> Assuming *txt_size* is a function that takes no arguments and returns an *int* value, which of the following definitions are illegal? Explain why.
+> ```shell
+>     unsigned buf_size = 1024;
+>     (a) int ia[buf_size];         (b) int ia[4 * 7 -14];
+>     (c) int ia[txt_size()];       (d) char st[11] = "fundamental";
+> ```
+```cpp
+    // (a) Illegal, because buf_size is variable that cannot be determined in compile time
+    // (c) Illegal, because the value of txt_size() returning is variable that cannot be determined in compile time.
+    // (d) Illegal, because the initialization of string literal need additional space to store a null character in the end.
+```
+
+## Exercise 3.28
+> What are the values in the following arrays?
+> ```cpp
+>     string sa[10];
+>     int ia[10];
+>     int main() {
+>         string sa2[10];
+>         int    ia2[10];
+>     }
+> ```
+```cpp
+    // sa[10]: empty
+    // ia[10]: 0
+    // sa2[10] and ia2[10]: undefined
+```
+
+## Exercise 3.29
+> List some of the drawbacks of using an array instead of a *vector*
+```cpp
+    // The primary drawback is that the size of array must be explicit.
+```
