@@ -262,8 +262,8 @@ Enter "RETURN" then "CTRL + D" to exit input
 ## Exercise 3.21
 > Redo the first exercise from $3.3.3 (p. 105) using iterators.
 ```shell
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_21_copy_ex3_16.cpp -o ex3_21_copy_ex3_16
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_21_copy_ex3_16
+root@localhost:/mnt/CppPrimer/Ch03$ g++ ex3_21_copy_ex3_16.cpp -o ex3_21_copy_ex3_16
+root@localhost:/mnt/CppPrimer/Ch03$ ./ex3_21_copy_ex3_16
 (a) 0; 
 (b) 10; 0000000000
 (c) 10; 42424242424242424242
@@ -276,8 +276,8 @@ hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_21_copy_ex3_16
 ## Exercise 3.22
 > Revise the loop that printed the first paragraph in *text* to instead change the elements in *text* that correspond to the first paragraph to all uppercase. After you've updated *text*, print its contents.
 ```shell
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_22.cpp -o ex3_22
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_22
+root@localhost:/mnt/CppPrimer/Ch03$ g++ ex3_22.cpp -o ex3_22
+root@localhost:/mnt/CppPrimer/Ch03$ ./ex3_22
 Enter "RETURN" then "CTRL + D" to exit input
     I am a bird. I like the sky.
 
@@ -288,8 +288,8 @@ Enter "RETURN" then "CTRL + D" to exit input
 ## Exercise 3.23
 > Write a program to create a *vector* with ten *int* elements. Using an iterator, assign each element a value that is twice its current value. Test your program by printing the *vector*.
 ```shell
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_23.cpp -o ex3_23
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_23
+root@localhost:/mnt/CppPrimer/Ch03$ g++ ex3_23.cpp -o ex3_23
+root@localhost:/mnt/CppPrimer/Ch03$ ./ex3_23
 Enter "RETURN" then "CTRL + D" to exit input
 0 1 2 3 4 5 6 7 8 9
 024681012141618
@@ -298,8 +298,8 @@ Enter "RETURN" then "CTRL + D" to exit input
 ## Exercise 3.24
 > Redo the last exercise from $3.3.3 (p. 105) using iterators.
 ```shell
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_24_copy_ex3_20.cpp -o ex3_24_copy_ex3_20
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_24_copy_ex3_20
+root@localhost:/mnt/CppPrimer/Ch03$ g++ ex3_24_copy_ex3_20.cpp -o ex3_24_copy_ex3_20
+root@localhost:/mnt/CppPrimer/Ch03$ ./ex3_24_copy_ex3_20
 Enter "RETURN" then "CTRL + D" to exit input
 1 2 3 4 5 6 7 8 9 10
 3 5 7 9 11 13 15 17 19 
@@ -310,8 +310,8 @@ Enter "RETURN" then "CTRL + D" to exit input
 ## Exercise 3.25
 > Rewrite the grade clustering program from $3.3.3 (p. 104) using iterators instead of subscripts.
 ```shell
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ g++ ex3_25.cpp -o ex3_25
-hoo@hoo-VirtualBox:/mnt/CppPrimer/Ch03$ ./ex3_25
+root@localhost:/mnt/CppPrimer/Ch03$ g++ ex3_25.cpp -o ex3_25
+root@localhost:/mnt/CppPrimer/Ch03$ ./ex3_25
 Enter "RETURN" then "CTRL + D" to exit input
 42 65 95 100 39 67 95 76 88 76 83 92 76 93
 0 0 0 1 1 0 2 3 2 4 1
@@ -356,4 +356,39 @@ Enter "RETURN" then "CTRL + D" to exit input
 > List some of the drawbacks of using an array instead of a *vector*
 ```cpp
     // The primary drawback is that the size of array must be explicit.
+```
+
+## Exercise 3.30
+> Identify the indexing errors in the following code:
+> ```cpp
+> constexpr size_t array_size = 10;
+> int ia[array_size];
+> for(size_t ix = 1; ix <= array_size; ++ix)
+>     ia[ix] = ix;
+> ```
+```cpp
+    // the for condition "ix <= array_size" changes to "ix < array_size"
+```
+
+## Exercise 3.31
+> Write a program to define an array of ten *int*s. Give each element the same value as its position in the array.
+```shell
+root@localhost:/mnt/e/horbyn/CppPrimer/Loadmap/CppPrimer/Ch03$ ./ex3_31
+0 1 2 3 4 5 6 7 8 9
+```
+
+## Exercise 3.32
+>Copy the array you defined in the previous exercise into another array. Rewrite your program to use *vector*s.
+```shell
+root@localhost:/mnt/e/horbyn/CppPrimer/Loadmap/CppPrimer/Ch03$ ./ex3_32
+After copying from array:
+0 1 2 3 4 5 6 7 8 9
+After copying from vector:
+0 1 2 3 4 5 6 7 8 9
+```
+
+## Exercise 3.33
+> What would happen if we did not iniialize the *scores* array in the program on page 116?
+```cpp
+    // The elements of the array is undefined.
 ```
