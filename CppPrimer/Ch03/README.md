@@ -373,14 +373,14 @@ Enter "RETURN" then "CTRL + D" to exit input
 ## Exercise 3.31
 > Write a program to define an array of ten *int*s. Give each element the same value as its position in the array.
 ```shell
-root@localhost:/mnt/e/horbyn/CppPrimer/Loadmap/CppPrimer/Ch03$ ./ex3_31
+root@localhost:/mnt/e/root/CppPrimer/Loadmap/CppPrimer/Ch03$ ./ex3_31
 0 1 2 3 4 5 6 7 8 9
 ```
 
 ## Exercise 3.32
 >Copy the array you defined in the previous exercise into another array. Rewrite your program to use *vector*s.
 ```shell
-root@localhost:/mnt/e/horbyn/CppPrimer/Loadmap/CppPrimer/Ch03$ ./ex3_32
+root@localhost:/mnt/e/root/CppPrimer/Loadmap/CppPrimer/Ch03$ ./ex3_32
 After copying from array:
 0 1 2 3 4 5 6 7 8 9
 After copying from vector:
@@ -396,15 +396,36 @@ After copying from vector:
 ## Exercise 3.34
 > Given that *p1* and *p2* point to elements in the same array, what does the following code do? Are there values of *p1* or *p2* that make this code illegal?  
 `p1 += p2 - p1;`
-```shell
+```cpp
+    // p1 will be equal of p2, because p1 add the distance between p2 and p1.
+    // No, it's legal.
 ```
 
 ## Exercise 3.35
 > Using pointers, write a program to set the elements in an array to zero.
 ```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_35
+0 1 2 3 4
 ```
 
 ## Exercise 3.36
 > Write a program to compare two arrays for equality. Write a similar program to compare two *vector*s.
 ```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_36
+The two array arr1 and arr2:
+0 1 2 3 4
+0 1 2 3 4
+are equality.
+The two array arr1 and arr3:
+0 1 2 3 4
+0 1 2 3 5
+are not equality.
+The two vectors arr_vec1 and arr_vec2:
+0 1 2 3 4
+0 1 2 3 4
+are not equality.
+The two vectors arr_vec1 and arr_vec3:
+0 1 2 3 4
+0 1 2 3 5
+are not equality.
 ```
