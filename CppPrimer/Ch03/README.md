@@ -429,3 +429,42 @@ The two vectors arr_vec1 and arr_vec3:
 0 1 2 3 5
 are not equality.
 ```
+
+## Exercise 3.37
+> What does the following program do?
+> ```cpp
+> const char ca[] = {'h', 'e', 'l', 'l', 'o'};
+> const char *cp = ca;
+> while (*cp) {
+>     cout << *cp << endl;
+>     ++cp;
+> }
+> ```
+```cpp
+    // Print each character of "hello" end with line feed
+```
+
+## Exercise 3.38
+> In this section, we noted that it was not only illegal but meaningless to try to add two pointers. Why would adding two pointers be meaningless?
+```cpp
+    // Pointers are equal of address. Unlike substraction of two address which yields the distance, what will adding two addresses yields is unknown.
+```
+
+## Exercise 3.39
+> Write a program to compare two *string*s. Now write a program to compare the values of two C-style character strings.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_39
+hello is less than hi
+hello is less than hi
+```
+
+## Exercise 3.40
+> Write a program to define two character arrays initialized from string literals. Now define a third character array to hold the concatenation of the two arrays. Use *strcpy* and *strcat* to copy the two arrays into the third.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_40
+The two strings: "hello, str1, " and "hi, str2!"
+After copying the former to an empty string:
+hello, str1,
+After concatenation the later to the former:
+hello, str1, hi, str2!
+```
