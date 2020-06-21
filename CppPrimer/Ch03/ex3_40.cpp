@@ -19,6 +19,4 @@ int main(){
     cout << cstr3 << endl;
 
     return 0;
-
-    return 0;
 }

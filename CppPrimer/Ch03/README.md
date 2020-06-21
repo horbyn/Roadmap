@@ -468,3 +468,50 @@ hello, str1,
 After concatenation the later to the former:
 hello, str1, hi, str2!
 ```
+
+## Exercise 3.41
+> Write a program to initialize a *vector* from an array of *int*s.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_41
+Print the buili-in array:
+0 1 2 3 4
+Print the vector:
+0 1 2 3 4
+```
+
+## Exercise 3.42
+> Write a program to copy a *vector* of *int*s into an array of *int*s.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_42
+Print the vector:
+0 1 2 3 4
+Print the built-in array:
+0 1 2 3 4
+```
+
+## Exercise 3.43
+> Write three different versions of a program to print the elements of *ia*. One version should use a range *for* to manage the iteration, the other two should use an ordinary *for* loop in one case using subscripts and in the other using pointers. In all three programs write all the types directly. That is, do not use a type alias, *auto*, or *decltype* to simplify the code.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_43
+0 1 2 3 4 5 6 7 8 9 10 11
+0 1 2 3 4 5 6 7 8 9 10 11
+0 1 2 3 4 5 6 7 8 9 10 11
+```
+
+## Exercise 3.44
+> Rewrite the programs from the previous exercise using a type alias for the type of the loop control variables.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_44
+0 1 2 3 4 5 6 7 8 9 10 11
+0 1 2 3 4 5 6 7 8 9 10 11
+0 1 2 3 4 5 6 7 8 9 10 11
+```
+
+## Exercise 3.45
+> Rewrite the programs again, this time using auto.
+```shell
+root@localhost:/mnt/d/CodeStorage/Loadmap/CppPrimer/Ch03$ ./ex3_45
+0 1 2 3 4 5 6 7 8 9 10 11
+0 1 2 3 4 5 6 7 8 9 10 11
+0 1 2 3 4 5 6 7 8 9 10 11
+```
