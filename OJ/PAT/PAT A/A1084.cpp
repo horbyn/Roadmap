@@ -38,7 +38,7 @@ int main() {
 	char tmp;
 	while (*s) {
 		idx = hash_table(*s);
-		if (!has[idx].has) {
+		if (!has[idx].has && !has[idx].dis) {
 			if ((*s >= 'A' && *s <= 'Z')
 				|| (*s >= 'a' && *s <= 'z')) {
 				tmp = *s ^ 32;// translate to CAP or low
