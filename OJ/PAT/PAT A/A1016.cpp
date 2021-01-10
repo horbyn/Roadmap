@@ -2,8 +2,6 @@
 #include <cstring>
 #include <algorithm>
 
-#pragma warning(disable: 4996)
-
 using namespace std;
 
 #define MAXSIZE 1000
@@ -20,40 +18,45 @@ struct man_t {
 int cen[24] = { 0 };//cent
 
 bool cmp(struct man_t a, struct man_t b) {
-	if (a.nam != b.nam)    return strcmp(a.nam, b.nam) < 0;
+	int ret = strcmp(a.nam, b.nam);
+	if (ret)    return ret < 0;///字符串比较不能直接拿两个变量比较
 	else if (a.MM != b.MM)    return a.MM < b.MM;
 	else if (a.dd != b.dd)    return a.dd < b.dd;
 	else if (a.HH != b.HH)    return a.HH < b.HH;
 	else    return a.mm < b.mm;
 }
 
+int calc_time_diff(int a1, int b1, int a2, int b2, int bas) {//base
+	int dif = 0;//difference value
+	if (b1 < b2) {
+		a1--;
+		dif = b1 + bas - b2;
+	} else    dif = b1 - b2;
+	dif = dif + (a1 - a2) * bas;
+	return dif;
+}
+
 void calc_time (struct man_t a, struct man_t b, double* dol, int* dur) {//dollar, duration
 	int T1 = a.HH, T2 = b.HH;
 	int t0 = 0, tn = 23;
-	while (T1 > t0)    t0++;
+	while (T1 > t0++);
 	while (T2 < tn)    tn--;
 
 	int min;
-	min = t0 - T1;
-	dol = dol + cen[t0 - 1] * min;
-	dur += min;
+	min = calc_time_diff(t0, 0, T1, a.mm, 60);
+	*dol = *dol + cen[t0 - 1] * min;
+	*dur += min;
 
-	min = T2 - tn;
-	dol = dol + cen[tn] * min;
-	dur += min;
+	min = calc_time_diff(T2, b.mm, tn, 00, 60);
+	*dol = *dol + cen[tn] * min;
+	*dur += min;
 
-	int dif = 0;
-	if (a.HH < b.HH) {
-		dif = a.HH + 24 - b.HH;
-		a.dd--;
-	}
-	else    dif = a.HH - b.HH;
-	dif = dif + (a.dd - b.dd) * 24;
+	int hou = calc_time_diff(b.dd, tn, a.dd, t0, 24);//hour
 
-	for (int i = 0; i < dif; ++i, ++t0) {
+	for (int i = 0; i < hou; ++i, ++t0) {
 		if (t0 == 24)    t0 = 0;
-		dol = dol + cen[t0] * 60;
-		dur += 60;
+		*dol = *dol + cen[t0] * 60;
+		*dur += 60;
 	}
 }
 
@@ -61,7 +64,7 @@ int main() {
 	bool flag = false;
 	double dol = 0.0;
 	int dur = 0;
-	char ch, str[9];
+	char str[9];
 	int n;
 
 	//INPUT
@@ -77,30 +80,35 @@ int main() {
 	}
 
 	//EXECUTE
-	sort(man, man + n, cmp);///排序这里执行完不对，暂时看不出什么问题
-	char *tmp_nam = NULL;
+	sort(man, man + n, cmp);
+	char tmp_nam[21];
+	double sum;
+	strcpy(tmp_nam, "NULL");///strcpy()赋值是会覆盖的，而且自动带上'\0'
 	for (int i = 0; i < n; ) {
 		if (strcmp(tmp_nam, man[i].nam)) {
 			if (i != 0)
-				printf("Total amount: $%.2f\n", dol / 1000.0);
+				printf("Total amount: $%.2f\n", sum / 100.0);
 			printf("%s %02d\n", man[i].nam, man[i].MM);
-			tmp_nam = man[i].nam;
-			dol = 0.0;
+			strcpy(tmp_nam, man[i].nam);
+			sum = 0.0;
 		}
 		if (i + 1 == n)    break;
 		if (man[i].lab == 1 && man[i + 1].lab == 0) {
+			dol = 0.0;
+			dur = 0;
 			calc_time(man[i], man[i + 1], &dol, &dur);
-			i += 2;
+			sum += dol;
 			flag = true;
-		} else    i += 1;
-		if (flag) {
-			printf("%d:%d:%d ", man[i].dd, man[i].HH, man[i].mm);
-			printf("%d:%d:%d ", man[i + 1].dd, man[i + 1].HH, man[i + 1].mm);
-			printf("%d %.2f\n", dur, dol / 1000.0);
-			flag = false;
 		}
+		if (flag) {
+			printf("%02d:%02d:%02d ", man[i].dd, man[i].HH, man[i].mm);
+			printf("%02d:%02d:%02d ", man[i + 1].dd, man[i + 1].HH, man[i + 1].mm);
+			printf("%d $%.2f\n", dur, dol / 100.0);
+			flag = false;
+			i += 2;
+		} else    i += 1;
 	}
-	printf("Total amount: $%.2f\n", dol / 1000.0);
+	printf("Total amount: $%.2f\n", sum / 100.0);
 
 	return 0;
 }
