@@ -7,7 +7,7 @@ static const int maxn = 50;
 static const int maxk = 2000;
 
 set<int> set_tot[maxn];//set total
-vector<vector<int> > set_pai(maxk);//set total
+vector<vector<int> > set_pai(maxk);//set pair
 
 static bool
 set_cmp(set<int>& s2, set<int>::iterator& it) {
