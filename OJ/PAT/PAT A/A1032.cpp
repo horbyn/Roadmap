@@ -1,26 +1,14 @@
 #include <iostream>
 #include <iomanip>
-#include <stack>
 using namespace std;
 
 static const int maxn = 100000;
-int node[maxn];
 
-int cmp_lists(stack<int> ls1, stack<int> ls2) {
-	int ret = -1, cou = 1;//count
-	while (ls1.size() && ls2.size()) {//只有当两条链都有元素时才遍历
-		if (ls1.top() != ls2.top()) {
-			if (cou == 1)    return -1;
-			else    break;
-		} else {
-			ret = ls1.top();//记录每次栈顶相等时的元素
-			ls1.pop();
-			ls2.pop();
-		}
-		cou++;
-	}
-	return ret;
-}
+struct node_t {
+	char cha;
+	int next;
+	bool flag = false;
+}node[maxn];
 
 int main() {
 	int addr1, addr2, n;
@@ -28,31 +16,26 @@ int main() {
 	//1. INPUT
 	cin >> addr1 >> addr2 >> n;
 	int inp;
-	char inp_ch;
 	for (int i = 0; i < n; ++i) {
 		cin >> inp;
-		cin >> inp_ch >> node[inp];//每个 node[] 元素就是 next
+		cin >> node[inp].cha >> node[inp].next;
 	}
 
 	//2. EXECUTE
-	int idx = addr1;
-	stack<int> list1;
-	while (1) {//遍历第一条链，入栈沿途枚举的地址
-		list1.push(idx);
-		idx = node[idx];
-		if (idx == -1)    break;
+	int i = addr1;
+	while (i != -1) {//遍历第一条链表，标记为 true
+		node[i].flag = true;
+		i = node[i].next;
 	}
-	idx = addr2;
-	stack<int> list2;
-	while (1) {
-		list2.push(idx);
-		idx = node[idx];
-		if (idx == -1)    break;
+	i = addr2;
+	while (i != -1) {//遍历第二条链表
+		if (node[i].flag) {//遇到 true 标识，说明当前为所求
+			cout << setw(5) << setfill('0') << i;
+			return 0;
+		}
+		i = node[i].next;
 	}
-
-	//3. OUTPUT
-	int ret = cmp_lists(list1, list2);
-	cout << ret;
+	cout << "-1";//否则遍历完第二条链，那就是没有共同 suffix
 
 	return 0;
 }
