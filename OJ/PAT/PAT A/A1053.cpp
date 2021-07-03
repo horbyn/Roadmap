@@ -3,65 +3,69 @@
 #include <algorithm>
 using namespace std;
 
-struct node_t {
-	int weight;
-	int total_weight;
-	vector<int> child;
-};
+typedef struct node_t {//一般树组织方式: data + vector
+	int          data;
+	vector<int > child;
+}node_t;
 
-static const int maxn = 100;
-static int s, ptr = 0;
-static vector<int> temp;
-static vector<vector<int> > outp;
-static node_t tree[maxn];
+const int maxn = 100;
+int n, m, s;
+vector<int > path_tmp;
+vector<vector<int > > path;
+node_t tree[maxn];
 
-bool cmp(vector<int> a, vector<int> b) {
-	int i, len = (int)min(a.size(), b.size()) - 1;
-	for (i = 0; i < len && a[i] == b[i]; ++i);
-	return    a[i] > b[i];
+bool cmp(vector<int > a, vector<int > b) {//二维数组比较大小的 cmp() 思路: 逐个遍历
+	int len = (int)a.size() <= (int)b.size() ? (int)a.size() : (int)b.size();
+	for (int i = 0; i < len; ++i) {
+		if (a[i] == b[i])    continue;
+		else    return a[i] > b[i];
+	}
 }
 
-void dfs(node_t* t, int w) {
-	node_t* cur = t;
-	temp.push_back(cur->weight);//尝试当前值
+void dfs(node_t *node, int sum) {//遍历 root->leaves 用 dfs()
+	sum = sum + node->data;
+	path_tmp.push_back(node->data);
 
-	if (w + cur->weight == s && cur->child.size() == 0) {//权重够了并且当前结点是叶子才能打印
-		outp.push_back(temp);
-		ptr++;
+	if (node->child.empty()) {
+		if (sum == s)    path.push_back(path_tmp);
+		path_tmp.pop_back();
+		return;
 	}
-
-	for (unsigned i = 0; i < cur->child.size(); ++i)
-		dfs(&tree[cur->child[i]], w + cur->weight);
-	temp.pop_back();//最后当前结点离开队列
+	if (sum < s) {
+		for (int i = 0; i < (int)node->child.size(); ++i) {
+			int child = node->child[i];
+			dfs(&tree[child], sum);
+		}
+	}
+	path_tmp.pop_back();
 }
 
 int main() {
-	int n, m;
-
-	/* 0. 初始化 */
-	for (int i = 0; i < maxn; ++i)    tree[i].child.clear();
-
-	/* 1. 输入 */
+	/* 1. INPUT MODULE */
 	cin >> n >> m >> s;
-	for (int i = 0; i < n; ++i)    cin >> tree[i].weight;
+	for (int i = 0; i < n; ++i) {
+		int inp;
+		cin >> inp;
+		tree[i].data = inp;
+	}
 	for (int i = 0; i < m; ++i) {
-		int idx, num;
-		cin >> idx >> num;
+		int node, num;
+		cin >> node >> num;
 		for (int j = 0; j < num; ++j) {
-			int inp;
-			cin >> inp;
-			tree[idx].child.push_back(inp);
+			int leaf;
+			cin >> leaf;
+			tree[node].child.push_back(leaf);
 		}
 	}
 
-	/* 2. 主逻辑 */
+	/* 2. MAIN LOGIC */
 	dfs(&tree[0], 0);
-	sort(outp.begin(), outp.end(), cmp);
 
-	/* 3. 输出 */
-	for (int i = 0; i < ptr; ++i) {
-		cout << outp[i][0];
-		for (unsigned j = 1; j < outp[i].size(); ++j)    cout << " " << outp[i][j];
+	/* 3. OUTPUT MODULE */
+	sort(path.begin(), path.end(), cmp);
+	for (int i = 0; i < (int)path.size(); ++i) {
+		cout << path[i][0];
+		for (int j = 1; j < (int)path[i].size(); ++j)    cout << " " << path[i][j];
 		cout << endl;
 	}
 

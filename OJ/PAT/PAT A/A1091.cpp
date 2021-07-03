@@ -2,76 +2,68 @@
 #include <queue>
 using namespace std;
 
-static const int max_x = 1286;
-static const int max_y = 128;
-static const int max_z = 60;
-struct node_t {
+typedef struct orientation_t {
 	int x, y, z;
-};
-static struct node_t node;//临时变量，存放当前访问的坐标点
-static bool inq[max_z][max_x][max_y] = { false };//记录坐标点状态是否已入队
-static int martix[max_z][max_x][max_y];//存放输入矩阵
-static int m, n, l, t;
-static int coor_x[] = { 0, 0, 1, -1, 0, 0 };//增量数组
-static int coor_y[] = { 1, -1, 0, 0, 0, 0 };
-static int coor_z[] = { 0, 0, 0, 0, 1, -1 };
+}ori_t;
 
-static bool is_valid(int x, int y, int z) {
-	if (x < 0 || x >= m || y < 0 || y >= n || z < 0 || z >= l)
-		return false;
-	if (martix[z][x][y] == 0 || inq[z][x][y] == true)
-		return false;
-	return true;
-}
+const int maxx = 1286, maxy = 128, maxz = 60;
+int m, n, l, t, num = 0;
+int martix[maxx][maxy][maxz];
+bool vis[maxz][maxx][maxy] = { false };
 
-static int bfs(struct node_t s) {
-	int count = 1;
-	queue<struct node_t> q;
-	q.push(s);
-	inq[s.z][s.x][s.y] = true;//入队时设置已入队
+int arr_x[] = { 1,0,-1,0,0,0 };
+int arr_y[] = { 0,-1,0,1,0,0 };
+int arr_z[] = { 0,0,0,0,1,-1 };
+
+void bfs(int x, int y, int z) {
+	queue<ori_t > q;
+	ori_t tmp;
+	tmp.x = x; tmp.y = y; tmp.z = z;
+	q.push(tmp);
+	vis[z][x][y] = true;
 	while (!q.empty()) {
-		struct node_t top = q.front();//取出队头
+		ori_t front = q.front();
+		num++;
 		q.pop();
-		for (int i = 0; i < 6; ++i) {//访问队头元素——访问其附近所有点
-			node.x = top.x + coor_x[i];
-			node.y = top.y + coor_y[i];
-			node.z = top.z + coor_z[i];
-			if (is_valid(node.x, node.y, node.z)) {
-				q.push(node);
-				inq[node.z][node.x][node.y] = true;
-				count++;
+		for (int i = 0; i < 6; ++i) {
+			int new_x = front.x + arr_x[i];
+			int new_y = front.y + arr_y[i];
+			int new_z = front.z + arr_z[i];
+			if ((new_x < 0 || new_x >= m) || (new_y < 0 || new_y >= n) || (new_z < 0 || new_z >= l))    continue;
+
+			if (martix[new_z][new_x][new_y] == 1 && !vis[new_z][new_x][new_y]) {
+				tmp.x = new_x; tmp.y = new_y; tmp.z = new_z;
+				q.push(tmp);
+				vis[new_z][new_x][new_y] = true;
 			}
 		}
 	}
-	if (count >= t)    return count;
-	else    return 0;
 }
 
 int main() {
-	/* 1. 输入 */
+	/* 1. INPUT MODULE */
 	cin >> m >> n >> l >> t;
-	for (int i = 0; i < l; ++i)
-		for (int j = 0; j < m; ++j)
-			for (int k = 0; k < n; ++k)
-				cin >> martix[i][j][k];
-
-	/* 2. 主逻辑 */
-	int volumn_amount = 0;
 	for (int i = 0; i < l; ++i) {
 		for (int j = 0; j < m; ++j) {
 			for (int k = 0; k < n; ++k) {
-				if (martix[i][j][k] == 1 && inq[i][j][k] == false) {
-					node_t cur;
-					cur.z = i; cur.x = j; cur.y = k;
-					int n = bfs(cur);
-					volumn_amount += n;
-				}
+				cin >> martix[i][j][k];
 			}
 		}
 	}
 
-	/* 3. 输出 */
-	cout << volumn_amount;
+	/* 2. MAIN LOGIC */
+	int sum = 0;
+	for (int i = 0; i < l; ++i) {
+		for (int j = 0; j < m; ++j) {
+			for (int k = 0; k < n; ++k) {
+				if (martix[i][j][k] == 1 && !vis[i][j][k])    bfs(j, k, i);
+				if (num >= t)    sum += num;
+				num = 0;
+			}
+		}
+	}
 
+	/* 3. OUTPUT MODULE */
+	cout << sum;
 	return 0;
 }
