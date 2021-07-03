@@ -1,58 +1,54 @@
-#include <iostream>
-#include <iomanip>
+#include <cstdio>
 #include <vector>
+#pragma warning(disable: 4996)
 using namespace std;
 
-struct node_t {
-	double weight;
-	vector<int> child;
-};
+typedef struct node_t {//一般数组织
+	double       data;
+	vector<int > child;
+}node_t;
 
-static const int maxn = 100000;
-static double r, sales = 0.0;
-static int ptr = 0;
-static node_t tree[maxn];
+const int maxn = 100000;
+int n;
+double p, r, sales = 0.0;
+node_t tree[maxn];
 
-void dfs(node_t* t, double w) {
-	node_t* cur = t;
-
-	if (cur->weight != tree[0].weight) {//根单独处理
-		if (cur->child.size())    cur->weight = w * (1 + r);//非叶结点
-		else    sales += w * (1 + r) * cur->weight;//叶结点
+void dfs(node_t* t, double u) {//遍历 root->leaves 用 dfs()
+	if (t->child.empty()) {
+		sales += u * t->data;
+		return;
 	}
 
-	for (unsigned i = 0; i < cur->child.size(); ++i)
-		dfs(&tree[cur->child[i]], cur->weight);
+	u *= 1.0 + r;
+	for (int i = 0; i < (int)t->child.size(); ++i)
+		dfs(&tree[t->child[i]], u);
 }
 
 int main() {
-	int n;
-
-	/* 0. 初始化 */
-	for (int i = 0; i < maxn; ++i)    tree[i].child.clear();
-
-	/* 1. 输入 */
-	cin >> n >> tree[0].weight >> r;
+	/* 1. INPUT MODULE */
+	scanf("%d%lf%lf", &n, &p, &r);
 	r /= 100.0;
 	for (int i = 0; i < n; ++i) {
-		int m, inp;
-		cin >> m;
-		if (m == 0) {
-			cin >> inp;
-			tree[i].weight = (double)inp;
-		} else {
+		int m;
+		scanf("%d", &m);
+		if (m != 0) {
+			int inp;
 			for (int j = 0; j < m; ++j) {
-				cin >> inp;
+				scanf("%d", &inp);
 				tree[i].child.push_back(inp);
 			}
+		} else {
+			int inp;
+			scanf("%d", &inp);
+			tree[i].data = inp;
 		}
 	}
 
-	/* 2. 主逻辑 */
-	dfs(&tree[0], 0.0);
+	/* 2. MAIN LOGIC */
+	dfs(&tree[0], p);
 
-	/* 3. 输出 */
-	cout << fixed << setprecision(1) << sales;
+	/* 3. OUTPUT MODULE */
+	printf("%.1lf", sales);
 
 	return 0;
 }
