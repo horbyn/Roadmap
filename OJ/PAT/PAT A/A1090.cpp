@@ -1,66 +1,50 @@
-#include <iostream>
-#include <iomanip>
+#include <cstdio>
 #include <vector>
-#include <algorithm>
-#include <cmath>
+#pragma warning(disable: 4996)//VS 用 scanf() 要加上这句话
 using namespace std;
 
-struct node_t {
-	int depth;
-	vector<int> child;
-};
+typedef struct node_t {//一般树组织
+	double data;
+	vector<int > child;
+}node_t;
 
-static const int maxn = 100000;
-static double r;
-static int root;
-static vector<int> depth_leaves;
-static node_t tree[maxn];
+const int maxn = 100000;
+int n, num = 0;
+double p, r, max_price = -1.0;
+node_t tree[maxn];
 
-static bool cmp(int a, int b) {
-	return a > b;
-}
-
-static void dfs(node_t* t, int d) {
-	node_t* cur = t;
-	cur->depth = d;
-
-	if (cur->child.size() == 0) {
-		depth_leaves.push_back(d);//保存叶子深度
+void dfs(node_t *t, double u) {//遍历 root-leaves 用 dfs()
+	if (t->child.empty()) {
+		if (u > max_price) {
+			max_price = u;
+			num = 1;
+		}
+		else if (u == max_price)    num++;
 		return;
 	}
 
-	for (unsigned i = 0; i < cur->child.size(); ++i)
-		dfs(&tree[cur->child[i]], d + 1);
+	u *= 1 + r;
+	for (int i = 0; i < (int)t->child.size(); ++i)
+		dfs(&tree[t->child[i]], u);
 }
 
 int main() {
-	int n;
-	double p;
-
-	/* 0. 初始化 */
-	for (int i = 0; i < maxn; ++i)    tree[i].child.clear();
-
-	/* 1. 输入 */
-	cin >> n >> p >> r;
+	/* 1. INPUT MODULE */
+	scanf("%d%lf%lf", &n, &p, &r);
 	r /= 100.0;
+	int root = -1;
 	for (int i = 0; i < n; ++i) {
 		int inp;
-		cin >> inp;
-		if (inp == -1)    root = i;
-		else    tree[inp].child.push_back(i);//输入反过来处理
+		scanf("%d", &inp);
+		if (inp != -1)    tree[inp].child.push_back(i);
+		else    root = i;
 	}
 
-	/* 2. 主逻辑 */
-	dfs(&tree[root], 0);//执行结束会得到所有叶子的深度
-	sort(depth_leaves.begin(), depth_leaves.end(), cmp);//排序
-	int max_depth = depth_leaves[0], max_nums = 1;
-	for (int i = 1; depth_leaves[i] == max_depth; ++i)
-		max_nums++;//找到多少个最大值
+	/* 2. MAIN LOGIC */
+	dfs(&tree[root], p);
 
-	/* 3. 输出 */
-	cout << fixed << setprecision(2)
-		<< p * pow(1 + r, max_depth)
-		<< " " << max_nums;
+	/* 3. OUTPUT MODULE */
+	printf("%.2lf %d", max_price, num);
 
 	return 0;
 }
