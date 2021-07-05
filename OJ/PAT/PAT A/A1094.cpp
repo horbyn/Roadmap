@@ -15,7 +15,7 @@ bool inq[maxn] = { false };
 node_t tree[maxn];
 
 void bfs(node_t& t) {
-	queue<node_t > q;
+	queue<node_t > q;//注意此处入队是 tree[] 元素的副本, 即退出 bfs() 后 tree[] 的值是没有被修改的————即在 bfs() 内我们修改了 t.level, 但退出 bfs() 你会发现相应的 tree[].level 仍是初始值 0; 但我们这里退出 bfs() 并不去使用 tree[] 元素所以总体上并没问题
 	t.level = 1;//初始化
 	gen[t.level] = 1;
 

@@ -1,53 +1,67 @@
 #include <iostream>
-#include <iomanip>
 #include <vector>
+#include <queue>
 using namespace std;
 
-struct node_t {
-	int depth;
-	vector<int> child;
-};
+typedef struct node_t {
+	int          level;
+	vector<int > child;
+}node_t;
 
-static const int maxn = 128;
-static int n, max_depth = -1;//总结点数，最大深度
-static int level_leaves[maxn];//层数肯定比结点数少，所以长度为结点数肯定够
-static node_t tree[maxn];
+const int maxn = 100;
+int n, m, ptr = 0;
+node_t tree[maxn];
+bool inq[maxn];
+int leaves[maxn];//记录每层叶子数
 
-static void dfs(node_t *t, int d) {
-	node_t *cur = t;
-	cur->depth = d;
-	if (d > max_depth)    max_depth = d;
+void bfs(node_t& t) {
+	queue<node_t > q;//注意此处入队是 tree[] 元素的副本, 即退出 bfs() 后 tree[] 的值是没有被修改的————即在 bfs() 内我们修改了 t.level, 但退出 bfs() 你会发现相应的 tree[].level 仍是初始值 0; 但我们这里退出 bfs() 并不去使用 tree[] 元素所以总体上并没问题
+	t.level = 0;//初始化
 
-	if (cur->child.size() == 0)    level_leaves[cur->depth]++;//这一层叶子数累加 1
+	q.push(t);
+	inq[1] = true;
+	while (!q.empty()) {
+		node_t front = q.front();
+		q.pop();
 
-	for (unsigned i = 0; i < cur->child.size(); ++i)
-		dfs(&tree[cur->child[i]], d + 1);
+		int leaves_num = front.child.size();
+		int level = front.level;
+		ptr = level;//记录元素个数: 因为每趟循环都会覆盖, 所以到最后肯定是最深层即元素个数
+		if (leaves_num == 0)    leaves[level]++;
+
+		for (int i = 0; i < (int)front.child.size(); ++i) {
+			int child = front.child[i];
+			tree[child].level = level + 1;
+
+			if (!inq[child]) {
+				q.push(tree[child]);
+				inq[child] = true;
+			}
+		}
+	}
 }
 
 int main() {
-	int m;
-
-	/* 0. 初始化 */
-	for (int i = 0; i < maxn; ++i)    tree[i].child.clear();
-
-	/* 1. 输入 */
-	cin >> n >> m;
+	/* 1. INPUT MODULE */
+	cin >> n;
 	if (n == 0)    return 0;
+	cin >> m;
 	for (int i = 0; i < m; ++i) {
-		int k, idx, inp;
-		cin >> idx >> k;
-		for (int j = 0; j < k; ++j) {
+		int node, num;
+		cin >> node >> num;
+		for (int j = 0; j < num; ++j) {
+			int inp;
 			cin >> inp;
-			tree[idx].child.push_back(inp);
+			tree[node].child.push_back(inp);
 		}
 	}
 
-	/* 2. 主逻辑 */
-	dfs(&tree[1], 0);
+	/* 2. MAIN LOGIC */
+	bfs(tree[1]);
 
-	/* 3. 输出 */
-	cout << level_leaves[0];
-	for (int i = 1; i <= max_depth; ++i)    cout << " " << level_leaves[i];
+	/* 3. OUTPUT MODULE */
+	cout << leaves[0];
+	for (int i = 1; i <= ptr; ++i)    cout << " " << leaves[i];
 
 	return 0;
 }
