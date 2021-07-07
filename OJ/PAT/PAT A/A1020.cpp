@@ -1,61 +1,74 @@
 #include <iostream>
 #include <queue>
+#include <vector>
 using namespace std;
 
-const int maxn = 30;
-struct node_t {
+typedef struct node_t {
 	int data;
-	node_t *left;
-	node_t *right;
-};
-int arr_post[maxn], arr_in[maxn];
+	struct node_t* left, * right;
+}node_t;
 
-node_t *create(int postL, int postR, int inL, int inR) {
-	/* 递归边界 */
+const int maxn = 31;
+int n;
+int post[maxn], in[maxn];
+bool inq[maxn];
+vector<int > level;
+
+/* 根据后续-中序建树: 其中四个参数范围均是闭区间 */
+node_t* post_in_create(int postL, int postR, int inL, int inR) {
 	if (postL > postR)    return NULL;
 
-	/* 递归式 */
-	node_t *root = new node_t;
-	root->data = arr_post[postR];
-	int k;
-	for (k = 0; k < inR; ++k)//找到中序的根
-		if (arr_post[postR] == arr_in[k])    break;
-	int left_num = k - inL;//关键：算出左子树长度
+	node_t* node = new node_t;
+	int root;
+	for (int i = inL; i <= inR; ++i) {
+		if (in[i] == post[postR]) {
+			root = i;
+			break;
+		}
+	}
+	int left_len = root - inL, right_len = inR - root;
 
-	root->left = create(postL, postL + left_num - 1, inL, k - 1);
-	root->right = create(postL + left_num, postR - 1, k + 1, inR);
-
-	return root;
+	node->data = in[root];
+	node->left = post_in_create(postL, postL + left_len - 1, inL, root - 1);
+	node->right = post_in_create(postR - right_len, postR - 1, root + 1, inR);
+	return node;
 }
 
-void level_traversal(node_t *t) {//类似 BFS() 遍历
-	/* 起点入队 */
-	queue<node_t *> q;//队列用结点指针类型比较方便
+// ======== 注: 入队判断去掉才是 AC 代码(至于为什么我还不清楚, 所以暂时记着) ==========
+/* 层序遍历: 常规 bfs() 广度搜索 */
+void level_transvel(node_t* t) {
+	queue<node_t * > q;
 	q.push(t);
+	inq[t->data] = true;//////////////////////////////暂时想不懂为什么 bfs() 的入队判断, 在层序遍历加上判断会 PA
 	while (!q.empty()) {
-		/* 访问队头元素 */
-		node_t *top =q.front();
+		node_t *front = q.front();
 		q.pop();
+		level.push_back(front->data);
 
-		if (top == t)    cout << top->data;
-		else    cout << " " << top->data;
-		/* 遍历队头元素的下一 "广度" 所有元素 */
-		if (top->left)    q.push(top->left);
-		if (top->right)    q.push(top->right);
+		if (front->left && !inq[front->left->data]) {//////////////////////////////暂时想不懂为什么 bfs() 的入队判断, 在层序遍历加上判断会 PA
+			q.push(front->left);
+			inq[front->left->data] = true;//////////////////////////////暂时想不懂为什么 bfs() 的入队判断, 在层序遍历加上判断会 PA
+		}
+		if (front->right && !inq[front->right->data]) {//////////////////////////////暂时想不懂为什么 bfs() 的入队判断, 在层序遍历加上判断会 PA
+			q.push(front->right);
+			inq[front->right->data] = true;//////////////////////////////暂时想不懂为什么 bfs() 的入队判断, 在层序遍历加上判断会 PA
+		}
 	}
 }
 
 int main() {
-	int n;
-
-	/* 1. 输入 */
+	/* 1. INPUT MODULE */
 	cin >> n;
-	for (int i = 0; i < n; ++i)    cin >> arr_post[i];
-	for (int i = 0; i < n; ++i)    cin >> arr_in[i];
+	for (int i = 0; i < n; ++i)    cin >> post[i];
+	for (int i = 0; i < n; ++i)    cin >> in[i];
 
-	/* 2. 主逻辑 */
-	node_t *tree = create(0, n - 1, 0, n - 1);
-	level_traversal(tree);
+	/* 2. MAIN LOGIC */
+	node_t* tree = post_in_create(0, n - 1, 0, n - 1);
+	level_transvel(tree);
+
+	/* 3. OUTPUT MODULE */
+	cout << level[0];
+	for (int i = 1; i < (int)level.size(); ++i)    cout << " " << level[i];
 
 	return 0;
 }
