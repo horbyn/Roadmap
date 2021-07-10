@@ -4,81 +4,84 @@
 #include <queue>
 using namespace std;
 
-struct tree_t {
-	int data;
-	tree_t* left;
-	tree_t* right;
-};
-struct inp_t {
-	int left;
-	int right;
-};
+typedef struct node_t {
+	int idx;
+	struct node_t* left, * right;
+}node_t;
 
-static const int maxn = 100;
-static inp_t inp[maxn];
-static vector<int> int_keys, level_order;
-static int ptr = 0;
+const int maxn = 100;
+int n, Ain[maxn], node_data[maxn];
+vector<int > tree[maxn], Vin, level;
 
-static tree_t* dfs_create(int val) {
-	tree_t* node = new tree_t;
+/* 建树: 根据邻接表建树, 注意此处树结点实质是 BST 序号 */
+node_t* create(int r) {
+	node_t* node = new node_t;
+	node->idx = r;
 
-	if (inp[val].left == -1 && inp[val].right == -1) {
+	if (tree[r][0] == -1 && tree[r][1] == -1) {
 		node->left = node->right = NULL;
-		return node;
+	} else if (tree[r][0] != -1 && tree[r][1] == -1) {
+		node->left = create(tree[r][0]);
+		node->right = NULL;
+	} else if (tree[r][0] == -1 && tree[r][1] != -1) {
+		node->left = NULL;
+		node->right = create(tree[r][1]);
+	} else {
+		node->left = create(tree[r][0]);
+		node->right = create(tree[r][1]);
 	}
-
-	if (inp[val].left != -1)
-		node->left = dfs_create(inp[val].left);
-	else    node->left = NULL;
-	if (inp[val].right != -1)
-		node->right = dfs_create(inp[val].right);
-	else    node->right = NULL;
 	return node;
 }
 
-static void pre_order_traversal(tree_t* t) {
+/* 中序遍历 */
+void in_order_travesal(node_t* t) {
 	if (t == NULL)    return;
 
-	pre_order_traversal(t->left);
-	t->data = int_keys[ptr++];
-	pre_order_traversal(t->right);
+	in_order_travesal(t->left);
+	Vin.push_back(t->idx);
+	in_order_travesal(t->right);
 }
 
-static void level_order_traversal(tree_t* t) {
-	queue<tree_t*> q;
+/* 层序遍历 */
+void level_order_travesal(node_t* t) {
+	queue<node_t*> q;
 	q.push(t);
 	while (!q.empty()) {
-		tree_t* top = q.front();
+		node_t* front = q.front();
 		q.pop();
-		level_order.push_back(top->data);
 
-		if (top->left != NULL)    q.push(top->left);
-		if (top->right != NULL)    q.push(top->right);
+		int idx = front->idx;
+		level.push_back(node_data[idx]);
+
+		if (front->left)    q.push(front->left);
+		if (front->right)    q.push(front->right);
 	}
 }
 
 int main() {
-	int n, input;
-
-	/* 1. 输入 */
+	/* 1. INPUT MODULE */
 	cin >> n;
-	for (int i = 0; i < n; ++i)
-		cin >> inp[i].left >> inp[i].right;
 	for (int i = 0; i < n; ++i) {
-		cin >> input;
-		int_keys.push_back(input);
+		int l, r;
+		cin >> l >> r;
+		tree[i].push_back(l);
+		tree[i].push_back(r);
 	}
+	for (int i = 0; i < n; ++i)    cin >> Ain[i];
 
-	/* 2. 主逻辑 */
-	tree_t* tree = dfs_create(0);//dfs() 建树
-	sort(int_keys.begin(), int_keys.end());
-	pre_order_traversal(tree);//先序遍历存放树的数据域
-	level_order_traversal(tree);//层序遍历输出
+	/* 2. MAIN LOGIC */
+	node_t* bst = create(0);
+	sort(Ain, Ain + n);				//BST 序列中序遍历: BST 中序是有序序列所以直接排序
+	in_order_travesal(bst);			//BST 序号中序遍历
+	for (int i = 0; i < n; ++i) {	//建立 BST 序号和 BST 结点数据的联系
+		int idx = Vin[i];
+		node_data[idx] = Ain[i];
+	}
+	level_order_travesal(bst);		//最后对 BST 结点数据进行中序遍历
 
-	/* 3. 输出 */
-	cout << level_order[0];
-	for (unsigned i = 1; i < level_order.size(); ++i)
-		cout << " " << level_order[i];
+	/* 3. OUTPUT MODULE */
+	cout << level[0];
+	for (int i = 1; i < (int)level.size(); ++i)    cout << " " << level[i];
 
 	return 0;
 }
