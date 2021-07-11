@@ -1,10 +1,14 @@
 /*
  * PA 15/25, 应该是思路错了
  *    我的思路是完全树有右孩子必有左孩子, 所以若有右孩子但无左孩子则不是完全树
+ * PA 18/25:
+ *    回看时发现输入结点数值是[0, 20], 所以不能用 char, 修改为 string 也 PA
+ * 那确实思路有问题
  */
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <string>
 #include <cstring>
 using namespace std;
 
@@ -19,8 +23,8 @@ bool vis[maxn];
 vector<int > tree[maxn];
 
 /* 转换字符-整型 */
-int trans(char c) {
-	if (c != '-')    return c - '0';
+int trans(string s) {
+	if (s != "-")    return atoi(s.c_str());
 	else    return -1;
 }
 
@@ -65,7 +69,7 @@ int main() {
 	/* 1. INPUT MODULE */
 	cin >> n;
 	for (int i = 0; i < n; ++i) {
-		char l, r;
+		string l, r;
 		cin >> l >> r;
 		int le = trans(l), ri = trans(r);
 		tree[i].push_back(le);
