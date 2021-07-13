@@ -2,38 +2,42 @@
 #include <algorithm>
 using namespace std;
 
-struct node_t {
-	int data;
-	int height;
-	node_t* left;
-	node_t* right;
-};
+typedef struct node_t {
+	int data, height;
+	struct node_t* left, * right;
+}node_t;
 
 const int maxn = 20;
-int inp[maxn];
+int n;
 
-node_t* create_node(int val) {
-	node_t* n = new node_t;
-	n->data = val;
-	n->height = 1;
-	n->left = n->right = NULL;
-	return n;
+/* 获取高度 */
+int get_height(node_t* t) {
+	if (t == NULL)    return 0;
+	else    return t->height;
 }
 
-int get_height(node_t* r) {
-	if (r == NULL)    return 0;
-	return r->height;
+/* 获取平衡因子: 左子树高度 - 右子树高度 */
+int get_balance(node_t* t) {
+	return get_height(t->left) - get_height(t->right);
 }
 
-void update_height(node_t *r) {
-	r->height = max(get_height(r->left), get_height(r->right)) + 1;
+/* 更新高度: 左右子树最大者 + 1 */
+void update_height(node_t* t) {
+	t->height = max(get_height(t->left), get_height(t->right)) + 1;
 }
 
-int get_balance(node_t* r) {
-	return get_height(r->left) - get_height(r->right);
+/* RR 型右旋: 即右下变右上 */
+void r(node_t*& r) {
+	node_t* tmp = r->right;
+	r->right = tmp->left;
+	tmp->left = r;
+	update_height(r);//一定要先低再高。因为先高再低, 低的还没更新, 那么高的就是错的
+	update_height(tmp);
+	r = tmp;
 }
 
-void R(node_t* &r) {
+/* LL 型左旋: 即左下变左上 */
+void l(node_t*& r) {
 	node_t* tmp = r->left;
 	r->left = tmp->right;
 	tmp->right = r;
@@ -42,63 +46,58 @@ void R(node_t* &r) {
 	r = tmp;
 }
 
-void L(node_t*& r) {
-	node_t* tmp = r->right;
-	r->right = tmp->left;
-	tmp->left = r;
-	update_height(r);
-	update_height(tmp);
-	r = tmp;
-}
-
-void insert(node_t* &r, int val) {
-	if (r == NULL) {
-		r = create_node(val);
+/* AVL 插入: 三部曲: 插入; 更新高度; 判平衡因子 */
+void insert(node_t*& t, int v) {
+	if (t == NULL) {
+		node_t* node = new node_t;
+		node->data = v;
+		node->height = 1;
+		node->left = node->right = NULL;
+		t = node;
 		return;
 	}
 
-	if (r->data > val) {
+	if (v < t->data) {
 		//1. 插入
-		insert(r->left, val);
+		insert(t->left, v);
 		//2. 更新高度
-		update_height(r);
-		//3. 判是否平衡
-		if (get_balance(r) == 2) {//左子树不平衡只有 LL 和 LR
-			//4. 判是哪种类型的不平衡
-			if (get_balance(r->left) == 1) {//LL
-				R(r);//LL 右旋调整
-			} else {//剩下的情况只有 LR
-				L(r->left);//LR 先左旋
-				R(r);//再右旋
+		update_height(t);
+		//3. 判平衡因子
+		if (get_balance(t) == 2) {
+			int ret = get_balance(t->left);
+			if (ret == 1)    l(t);	//LL
+			else if (ret == -1) {	//LR
+				r(t->left);//LR 先 R 后 L
+				l(t);
 			}
 		}
 	} else {
-		insert(r->right, val);
-		update_height(r);
-		if (get_balance(r) == -2) {
-			if (get_balance(r->right) == -1) {//RR
-				L(r);//RR 左旋
-			} else {
-				R(r->right);
-				L(r);
+		insert(t->right, v);
+		update_height(t);
+		if (get_balance(t) == -2) {
+			int ret = get_balance(t->right);
+			if (ret == -1)    r(t);	//RR
+			else if (ret == 1) {	//RL
+				l(t->right);//RL 先 L 后 R
+				r(t);
 			}
 		}
 	}
 }
 
 int main() {
-	int n;
-
-	/* 1. 输入 */
+	/* 1. INPUT MODULE */
 	cin >> n;
-	for (int i = 0; i < n; ++i)    cin >> inp[i];
-
-	/* 2. 主逻辑 */
 	node_t* tree = NULL;
-	for (int i = 0; i < n; ++i)    insert(tree, inp[i]);
+	for (int i = 0; i < n; ++i) {
+		int inp;
+		cin >> inp;
+		/* 2. MAIN LOGIC */
+		insert(tree, inp);
+	}
 
-	/* 3. 输出 */
-	if (n != 0)    cout << tree->data << endl;
+	/* 3. OUTPUT MODULE */
+	if (tree)    cout << tree->data;
 
 	return 0;
 }
