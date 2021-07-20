@@ -1,114 +1,91 @@
 #include <cstdio>
-#include <cstring>
+#include <iostream>
+#include <string>
 #include <algorithm>
-
+#pragma warning(disable: 4996)
 using namespace std;
 
-#define MAXSIZE 1000
+typedef struct record_t {
+	string name;
+	int mon, d, h, m;
+	bool flag;
+}record_t;
 
-struct man_t {
-	char nam[21];//name
-	int  MM;
-	int  dd;
-	int  HH;
-	int  mm;
-	bool lab;//label
-}man[1001];
+const int maxn = 1000;
+int n, cost[24];
+record_t rec[maxn];
 
-int cen[24] = { 0 };//cent
-
-bool cmp(struct man_t a, struct man_t b) {
-	int ret = strcmp(a.nam, b.nam);
-	if (ret)    return ret < 0;///字符串比较不能直接拿两个变量比较
-	else if (a.MM != b.MM)    return a.MM < b.MM;
-	else if (a.dd != b.dd)    return a.dd < b.dd;
-	else if (a.HH != b.HH)    return a.HH < b.HH;
-	else    return a.mm < b.mm;
-}
-
-int calc_time_diff(int a1, int b1, int a2, int b2, int bas) {//base
-	int dif = 0;//difference value
-	if (b1 < b2) {
-		a1--;
-		dif = b1 + bas - b2;
-	} else    dif = b1 - b2;
-	dif = dif + (a1 - a2) * bas;
-	return dif;
-}
-
-void calc_time (struct man_t a, struct man_t b, double* dol, int* dur) {//dollar, duration
-	int T1 = a.HH, T2 = b.HH;
-	int t0 = 0, tn = 23;
-	while (T1 > t0++);
-	while (T2 < tn)    tn--;
-
-	int min;
-	min = calc_time_diff(t0, 0, T1, a.mm, 60);
-	*dol = *dol + cen[t0 - 1] * min;
-	*dur += min;
-
-	min = calc_time_diff(T2, b.mm, tn, 00, 60);
-	*dol = *dol + cen[tn] * min;
-	*dur += min;
-
-	int hou = calc_time_diff(b.dd, tn, a.dd, t0, 24);//hour
-
-	for (int i = 0; i < hou; ++i, ++t0) {
-		if (t0 == 24)    t0 = 0;
-		*dol = *dol + cen[t0] * 60;
-		*dur += 60;
-	}
+/* 比较函数 */
+bool cmp(record_t a, record_t b) {
+	if (a.name != b.name)    return a.name < b.name;
+	else if (a.mon != b.mon)    return a.mon < b.mon;
+	else if (a.d != b.d)    return a.d < b.d;
+	else if (a.h != b.h)    return a.h < b.h;
+	else    return a.m < b.m;
 }
 
 int main() {
-	bool flag = false;
-	double dol = 0.0;
-	int dur = 0;
-	char str[9];
-	int n;
-
-	//INPUT
-	for (int i = 0; i < 24; ++i)    scanf("%d", &cen[i]);
+	/* 1. INPUT MODULE */
+	for (int i = 0; i < 24; ++i)    scanf("%d", &cost[i]);
 	scanf("%d", &n);
 	for (int i = 0; i < n; ++i) {
-		scanf("%s", man[i].nam);///%s遇空格会停止读入；而且会自动加上'\0'
-		scanf("%2d:%2d:%2d:%2d ", &man[i].MM, &man[i].dd,
-			&man[i].HH, &man[i].mm);
-		scanf("%s", str);
-		if (!strcmp(str, "on-line"))    man[i].lab = 1;
-		else    man[i].lab = 0;
+		string flag;
+		cin >> rec[i].name;
+		scanf("%d:%d:%d:%d", &rec[i].mon, &rec[i].d, &rec[i].h, &rec[i].m);
+		cin >> flag;
+		if (flag == "on-line")    rec[i].flag = true;
+		else    rec[i].flag = false;
 	}
 
-	//EXECUTE
-	sort(man, man + n, cmp);
-	char tmp_nam[21];
-	double sum;
-	strcpy(tmp_nam, "NULL");///strcpy()赋值是会覆盖的，而且自动带上'\0'
-	for (int i = 0; i < n; ) {
-		if (strcmp(tmp_nam, man[i].nam)) {
-			if (i != 0)
-				printf("Total amount: $%.2f\n", sum / 100.0);
-			printf("%s %02d\n", man[i].nam, man[i].MM);
-			strcpy(tmp_nam, man[i].nam);
-			sum = 0.0;
+	/* 2. MAIN LOGIC */
+	sort(rec, rec + n, cmp);
+	double charge = 0.0;
+	string name = rec[0].name;
+	cout << name;
+	printf(" %02d\n", rec[0].mon);
+	for (int i = 0; i < n; ++i) {
+		int min = 0;
+		double tmp_charge = 0.0;
+
+		if (rec[i].flag && i + 1 < n && !rec[i + 1].flag) {
+			if (name != rec[i].name) {
+				printf("Total amount: $%.2lf\n", charge / 100.0);
+				charge = 0.0;
+			}
+
+			int d = rec[i].d, h = rec[i].h, m = rec[i].m;
+
+			//处理时间的逻辑: 核心思路就是拆成一分钟一分钟地去算
+			for (; d <= rec[i + 1].d; ++d) {
+				int end_h = d < rec[i + 1].d ? 23 : rec[i + 1].h;
+				for (; h <= end_h; ++h) {
+					int end_m;
+					if (d == rec[i + 1].d)
+						end_m = h < rec[i + 1].h ? 60 : rec[i + 1].m;
+					else    end_m = 60;
+
+					for (; m < end_m; ++m) {
+						min++;
+						tmp_charge += (double)cost[h];
+					}
+					m = 0;
+				}
+				h = 0;
+			}
+		} else    continue;
+		charge += tmp_charge;
+
+		/* 3. OUTPUT MODULE */
+		if (name != rec[i].name) {
+			name = rec[i].name;
+			cout << name;
+			printf(" %02d\n", rec[i].mon);
 		}
-		if (i + 1 == n)    break;
-		if (man[i].lab == 1 && man[i + 1].lab == 0) {
-			dol = 0.0;
-			dur = 0;
-			calc_time(man[i], man[i + 1], &dol, &dur);
-			sum += dol;
-			flag = true;
-		}
-		if (flag) {
-			printf("%02d:%02d:%02d ", man[i].dd, man[i].HH, man[i].mm);
-			printf("%02d:%02d:%02d ", man[i + 1].dd, man[i + 1].HH, man[i + 1].mm);
-			printf("%d $%.2f\n", dur, dol / 100.0);
-			flag = false;
-			i += 2;
-		} else    i += 1;
+		printf("%02d:%02d:%02d %02d:%02d:%02d %d $%.2lf\n",
+			rec[i].d, rec[i].h, rec[i].m, rec[i + 1].d,
+			rec[i + 1].h, rec[i + 1].m, min, tmp_charge / 100.0);
 	}
-	printf("Total amount: $%.2f\n", sum / 100.0);
+	printf("Total amount: $%.2lf\n", charge / 100.0);
 
 	return 0;
 }
