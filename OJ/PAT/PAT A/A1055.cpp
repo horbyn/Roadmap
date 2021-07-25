@@ -1,74 +1,54 @@
-#include <iostream>
-#include <string>
-#include <map>
+#include <cstdio>//这道题用 cin 输入会超时
+#include <cstring>
 #include <algorithm>
+#pragma warning(disable: 4996)//VS 使用 scanf() 要忽略警告
 using namespace std;
 
-typedef struct worth_t {
-	string name;
+typedef struct man_t {
+	char name[16];
 	int age, worth;
-}worth_t;
+}man_t;
 
 typedef struct query_t {
 	int num, min, max;
-}query_t;
+}que_t;
 
 const int maxn = 100000;
 int n, k;
-worth_t hash_name[maxn], age[maxn], tmp[maxn];
-map<string, int > s2i;
-query_t query[maxn];
+man_t man[maxn];
+que_t query[maxn];
 
-/* 排序一: 按年龄排 */
-bool cmp1(worth_t a, worth_t b) {
-	return a.age < b.age;
-}
-
-/* 排序二: 结构体之间排序 */
-bool cmp2(worth_t a, worth_t b) {
+/* 比较函数 */
+bool cmp(man_t a, man_t b) {
 	if (a.worth != b.worth)    return a.worth > b.worth;
 	else if (a.age != b.age)    return a.age < b.age;
-	else    return a.name < b.name;
+	else    return strcmp(a.name, b.name) < 0;
 }
 
 int main() {
 	/* 1. INPUT MODULE */
-	cin >> n >> k;
-	for (int i = 0; i < n; ++i) {
-		cin >> hash_name[i].name >> hash_name[i].age >> hash_name[i].worth;
-		s2i.insert(make_pair(hash_name[i].name, i));//若键重复则放弃加入 map
-	}
-	for (int i = 0; i < k; ++i)    cin >> query[i].num >> query[i].min >> query[i].max;
+	scanf("%d%d", &n, &k);
+	for (int i = 0; i < n; ++i)    scanf("%s%d%d", man[i].name, &man[i].age, &man[i].worth);
+	for (int i = 0; i < k; ++i)    scanf("%d%d%d", &query[i].num, &query[i].min, &query[i].max);
 
 	/* 2. MAIN LOGIC */
-	for (int i = 0; i < n; ++i)    age[i] = hash_name[i];
-	sort(age, age + n, cmp1);//按年龄排序所有记录
-	//遍历 query
+	//排序
+	sort(man, man + n, cmp);
+	//筛选范围
 	for (int i = 0; i < k; ++i) {
-		cout << "Case #" << i + 1 << ":\n";
+		int num = query[i].num, min = query[i].min, max = query[i].max;
 
-		//确定年龄范围
-		int age_min = query[i].min, age_max = query[i].max;
-		int low = -1, high = -1;
-		for (int j = 0; j < n; ++j) {//确定年龄范围
-			if (low != -1 && high != -1)    break;
-			if (age[j].age >= age_min && low == -1)    low = j;
-			if (age[j].age >= age_max && high == -1)    high = age[j].age == age_max ? j : j - 1;
-		}
-		if (low > high) {
-			cout << "None\n";
-			continue;
-		}
-		
 		/* 3. OUTPUT MODULE */
-		for (int j = low; j <= high; ++j)    tmp[j - low] = age[j];
-		sort(tmp, tmp + (high - low + 1), cmp2);//结构体之间排序
-		int len = query[i].num < high - low + 1 ? query[i].num : high - low + 1;
-		for (int j = 0; j < len; ++j) {
-			string name = tmp[j].name;
-			int idx = s2i[name];
-			cout << hash_name[idx].name << " " << hash_name[idx].age << " " << hash_name[idx].worth << endl;
+		printf("Case #%d:\n", i + 1);
+		int k = 0;
+		for (int j = 0; j < n && k < num; ++j) {
+			if (min <= man[j].age && man[j].age <= max) {//符合这个范围的才给予输出
+				k++;
+				printf("%s %d %d\n", man[j].name, man[j].age, man[j].worth);
+			}
 		}
+		if (k == 0)    printf("None\n");
 	}
+
 	return 0;
 }
