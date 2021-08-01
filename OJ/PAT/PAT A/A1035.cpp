@@ -1,3 +1,4 @@
+/* PA 18/20 */
 #include <iostream>
 #include <string>
 #include <vector>
@@ -44,9 +45,9 @@ int main() {
 		for (int i = 0; i < (int)out.size(); ++i)    cout << out[i].acc << " " << out[i].pwd << endl;
 	}
 	else {
-		cout << "There is ";
-		if (n)    cout << n << " accounts ";
-		else    cout << "1 account ";
+		cout << "There ";
+		if (n)    cout << "are " << n << " accounts ";
+		else    cout << "is 1 account ";
 		cout << "and no account is modified";
 	}
 	return 0;
