@@ -2,34 +2,29 @@
 #include <algorithm>
 using namespace std;
 
-const int maxn = 100001;
-int arr[maxn], p;
-
-int binary_search(int min, int lef, int rig) {
-	int mid = lef;
-	long long tmp = (long long)arr[min] * p;
-	while (lef <= rig) {
-		mid = (lef + rig) / 2;
-		if (tmp >= arr[mid])    lef = mid + 1;
-		else    rig = mid - 1;
-	}
-
-	return mid - min;
-}
+const int maxn = 100000;
+int n;
+long long p, a[maxn];//因为单个元素最大10^9, 而 m * p 则可能超过 10^9
 
 int main() {
-	int n;
-
+	/* 1. INPUT MODULE */
 	cin >> n >> p;
-	for (int i = 0; i < n; ++i)    cin >> arr[i];
+	for (int i = 0; i < n; ++i)    cin >> a[i];
 
-	sort(arr, arr + n);
-	int num = 1, tmp_num;
+	/* 2. MAIN LOGIC */
+	int num = 0;
+	sort(a, a + n);
 	for (int i = 0; i < n; ++i) {
-		tmp_num = binary_search(i, i, n - 1);
-		if (tmp_num > num)    num = tmp_num;
+		int tmp = 1, j = i + 1;
+		for (; j < n; ++j) {
+			if (a[j] <= a[i] * p)    tmp++;
+			else    break;
+		}
+		if (tmp > num)    num = tmp;
+		if (j == n)    break;//如果 j 遍历到边界(数组递增)那么后面都只会更小, 所以没必要遍历了
 	}
 
+	/* 3. OUTPUT MODULE */
 	cout << num;
 
 	return 0;
