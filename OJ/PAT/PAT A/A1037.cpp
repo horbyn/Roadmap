@@ -3,44 +3,32 @@
 using namespace std;
 
 const int maxn = 100000;
-int cou[maxn], pro[maxn];
-
-bool cmp(int a, int b) {
-	return a > b;
-}
-
+int nc, np;
+int coupon[maxn], product[maxn];
 int main() {
-	int Nc, Np;
+	/* 1. INPUT MODULE */
+	cin >> nc;
+	for (int i = 0; i < nc; ++i)    cin >> coupon[i];
+	cin >> np;
+	for (int i = 0; i < np; ++i)    cin >> product[i];
 
-	cin >> Nc;
-	for (int i = 0; i < Nc; ++i)    cin >> cou[i];
-	cin >> Np;
-	for (int i = 0; i < Np; ++i)    cin >> pro[i];
-
-	sort(cou, cou + Nc, cmp);
-	sort(pro, pro + Np, cmp);
-
-	//1. CALC POSITIVE
-	int amo = 0;//amount
-	int i = 0, j = 0;
-	while (i < Nc && j < Np) {
-		if (cou[i] > 0 && pro[j] > 0) {
-			amo += cou[i++] * pro[j++];
-		} else    break;
+	/* 2. MAIN LOGIC */
+	sort(coupon, coupon + nc);
+	sort(product, product + np);
+	int max = 0;
+	int i = nc - 1, j = np - 1;
+	while (i >= 0 && j >= 0) {//正数
+		if (coupon[i] < 0 || product[j] < 0)    break;
+		max += coupon[i--] * product[j--];
+	}
+	i = 0; j = 0;
+	while (i < nc && j < np) {//负数
+		if (coupon[i] >= 0 || product[j] >= 0)    break;
+		max += coupon[i++] * product[j++];
 	}
 
-	//2. STORAGE POS
-	int dst_i, dst_j;
-	while (i < Nc && cou[i] > 0)    ++i;
-	while (j < Np && pro[j] > 0)    ++j;
-	dst_i = i; i = Nc - 1;
-	dst_j = j; j = Np - 1;
+	/* 3. OUTPUT MODULE */
+	cout << max;
 
-	//3. CALC NEGATIVE
-	while (i >= dst_i && j >= dst_j) {
-		amo += cou[i--] * pro[j--];
-	}
-
-	cout << amo;
 	return 0;
 }
