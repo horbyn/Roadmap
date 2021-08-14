@@ -1,3 +1,4 @@
+/* 最短路径: 单源 + 双标尺(点权) */
 /*
  * 思路: dijkstra() -> dfs()
  *     先直接 dijkstra() 找最短路径, 最后才在所有找到的最短路径上二次筛选出最优解
@@ -6,29 +7,27 @@
 #include <vector>
 using namespace std;
 
-const int maxn = 500;
-const int inf  = 0x3fffffff;
-bool vis[maxn] = { false };
-int n, s, num = 0, max_wei = -1;
-int g[maxn][maxn];//无向图只能用邻接矩阵(方便)
-int dis[maxn], weight[maxn];
-vector<int > pre[maxn], path, tmp_path;
+const int maxn = 500, inf = 0x3fffffff;
+int n, m, c1, c2, max_resc = -1, num = 0;
+bool vis[maxn];
+int g[maxn][maxn], dis[maxn], weig[maxn];
+vector<int > pre[maxn], path, path_tmp;
 
-void dijkstra() {
+void dijkstra(int s) {
 	//1. 初始化
-	fill(dis, dis + n, inf);
+	fill(dis, dis + maxn, inf);
 	dis[s] = 0;
 
 	for (int i = 0; i < n; ++i) {
 		//2. 找最小
-		int min = inf, u = -1;
+		int u = -1, min = inf;
 		for (int j = 0; j < n; ++j) {
 			if (!vis[j] && dis[j] < min) {
 				min = dis[j];
 				u = j;
 			}
 		}
-		if (u == -1)    return;//当前所有点都已不连通
+		if (u == -1)    return;//所有点都已被访问/所有点均不连通
 		vis[u] = true;
 
 		//3. 松弛
@@ -37,9 +36,8 @@ void dijkstra() {
 				if (dis[v] > dis[u] + g[u][v]) {
 					dis[v] = dis[u] + g[u][v];
 					pre[v].clear();
-					pre[v].push_back(u);//v 的前驱是 u
-				}
-				else if (dis[v] == dis[u] + g[u][v]) {
+					pre[v].push_back(u);
+				} else if (dis[v] == dis[u] + g[u][v]) {
 					pre[v].push_back(u);
 				}
 			}
@@ -47,50 +45,46 @@ void dijkstra() {
 	}
 }
 
-void dfs_travesal_path(int v) {
-	if (v == s) {
+void dfs(int u) {
+	if (c1 == u) {
+		path_tmp.push_back(u);
 		num++;
-		tmp_path.push_back(v);
-		//1. 计算路径上的 "次标尺"
+		//1. 遍历路径: 计算次标尺
 		int value = 0;
-		for (int i = (int)tmp_path.size() - 1; i >= 0; --i) {
-			int idx = tmp_path[i];
-			value += weight[idx];
+		for (int i = (int)path_tmp.size() - 1; i >= 0; --i) {
+			int v = path_tmp[i];
+			value += weig[v];
 		}
-		//2. 找最优 "次标尺"
-		if (value > max_wei) {
-			max_wei = value;
-			path = tmp_path;
+		//2. 比较: 择优
+		if (max_resc < value) {
+			max_resc = value;
+			path = path_tmp;
 		}
-		tmp_path.pop_back();
-	}
-	else {
-		tmp_path.push_back(v);
-		for (int i = 0; i < (int)pre[v].size(); ++i)
-			dfs_travesal_path(pre[v][i]);
-		tmp_path.pop_back();
+		path_tmp.pop_back();
+	} else {
+		path_tmp.push_back(u);
+		for (int i = 0; i < (int)pre[u].size(); ++i)    dfs(pre[u][i]);
+		path_tmp.pop_back();
 	}
 }
 
 int main() {
-	//1. INPUT MODULE
-	int e, d;
-	cin >> n >> e >> s >> d;
-	for (int i = 0; i < n; ++i)    cin >> weight[i];
+	/* 1. INPUT MODULE */
+	cin >> n >> m >> c1 >> c2;
 	fill(g[0], g[0] + maxn * maxn, inf);
-	for (int i = 0; i < e; ++i) {
-		int u, v, w;
-		cin >> u >> v >> w;
-		g[u][v] = w;
-		g[v][u] = w;
+	for (int i = 0; i < n; ++i)    cin >> weig[i];
+	for (int i = 0; i < m; ++i) {
+		int u, v, l;
+		cin >> u >> v >> l;
+		g[u][v] = g[v][u] = l;
 	}
+	
+	/* 2. MAIN LOGIC */
+	dijkstra(c1);
+	dfs(c2);
 
-	//2. MAIN LOGIC
-	dijkstra();
-	dfs_travesal_path(d);
-
-	//3. OUTPUT MODULE
-	cout << num << " " << max_wei;
+	/* 3. OUTPUT MODULE */
+	cout << num << " " << max_resc;
 
 	return 0;
 }
