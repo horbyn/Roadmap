@@ -1,30 +1,31 @@
+/* PA: 24/30 */
+/* 最短路径: 单源 + 三标尺(点权) */
 #include <iostream>
 #include <vector>
 using namespace std;
 
-const int maxn = 500;
-const int maxc = 100;
-const int inf  = 0x3fffffff;
+const int maxn = 500, inf = 0x3fffffff;
+int cm, n, sp, m;
+int min_sent = inf, min_back = inf;
 bool vis[maxn];
-int g[maxn][maxn], bikes[maxn], dis[maxn];
-int n, s, max_cap, min_bikes = inf, ret = inf;//顶点数、源点、最大点权、最小单车数、要归还的单车数
-vector<int > pre[maxn], path, tmp_path;
+int g[maxn][maxn], dis[maxn], nums[maxn];
+vector<int > pre[maxn], path, path_tmp;
 
 void dijkstra() {
 	//1. 初始化
 	fill(dis, dis + maxn, inf);
-	dis[s] = 0;
+	dis[0] = 0;
 
 	for (int i = 0; i <= n; ++i) {
 		//2. 找最小
-		int min = inf, u = -1;
+		int u = -1, min = inf;
 		for (int j = 0; j <= n; ++j) {
-			if (!vis[j] && dis[j] < min) {
+			if (!vis[j] && min > dis[j]) {
 				min = dis[j];
 				u = j;
 			}
 		}
-		if (u == -1)    return;//剩余所有顶点均不连通
+		if (u == -1)    return;//所有点均遍历完或不连通
 		vis[u] = true;
 
 		//3. 松弛
@@ -34,66 +35,75 @@ void dijkstra() {
 					dis[v] = dis[u] + g[u][v];
 					pre[v].clear();
 					pre[v].push_back(u);
-				} else if (dis[v] = dis[u] + g[u][v])
+				} else if (dis[v] == dis[u] + g[u][v])
 					pre[v].push_back(u);
 			}
 		}
 	}
 }
 
-void dfs_travesal_path(int v) {
-	if (v == s) {
-		int collect = 0, need = 0;
-		for (int i = (int)tmp_path.size() - 1; i >= 0; --i) {
-			//找出每条路径上一共差多少辆单车(变量 need 记录); 以及一共收集了多少辆单车
-			int u = tmp_path[i];
-			if (bikes[u] >= max_cap / 2)    collect += bikes[u] - max_cap / 2;//当前单车点有余, 收集
-			else {//当前单车点没米下锅, 先看看之前收集的够不够补
-				int diff = max_cap / 2 - bikes[u];//差多少辆单车？
-				if (collect >= diff)    collect -= diff;//PBMC 沿途劫富济贫后可以补充
-				else {
-					need += diff - collect;//PBMC 沿途劫富济贫还不够补, 劫来的全部补充, 然后再由 PBMC 提供
-					collect = 0;
-				}
-			}
+void dfs(int u) {
+	if (u == 0) {
+		path_tmp.push_back(u);
+		//1. 遍历路径: 累加标尺
+		int value = 0;
+		for (int i = 0; i < (int)path_tmp.size() - 1; ++i) {
+			//累加沿途站点所有的单车数
+			int v = path_tmp[i];
+			value += nums[v - 1];
 		}
-		if (need < min_bikes) {
-			min_bikes = need;
-			ret = collect;
-			path = tmp_path;
-		} else if (need == min_bikes && collect < ret) {
-			ret = collect;
-			path = tmp_path;
+		int station_nums = (int)path_tmp.size() - 1;//沿途站点数
+		int perfer = station_nums * (cm / 2);
+		int sent = 0, back = 0;
+		if (value < perfer) {//沿途单车数 vs. perfer 状态
+			//小于 perfer 状态那就 PBMC 发送更多的, 所以 sent 是正数; 肯定不用带回
+			sent = perfer - value;
+			back = 0;
+		} else {
+			//多于 perfer 状态那就 PBMC 一辆都不需要发送, 反而需要带回
+			sent = 0;
+			back = value - perfer;
 		}
-	} else {
-		tmp_path.push_back(v);
-		for (int i = 0; i < (int)pre[v].size(); ++i)
-			dfs_travesal_path(pre[v][i]);
-		tmp_path.pop_back();
+		//2. 比较标尺: 择优
+		if (min_sent > sent) {
+			min_sent = sent;
+			min_back = back;
+			path = path_tmp;
+		} else if (min_sent == sent && min_back > back) {
+			min_back = back;
+			path = path_tmp;
+		}
+		path_tmp.pop_back();
+	}
+	else {
+		path_tmp.push_back(u);
+		for (int i = 0; i < (int)pre[u].size(); ++i)    dfs(pre[u][i]);
+		path_tmp.pop_back();
 	}
 }
 
 int main() {
-	//1. INPUT MODULE
-	int sp, m;
-	cin >> max_cap >> n >> sp >> m;
-	for (int i = 1; i <= n; ++i)    cin >> bikes[i];
+	/* 1. INPUT MODULE */
 	fill(g[0], g[0] + maxn * maxn, inf);
+	cin >> cm >> n >> sp >> m;
+	for (int i = 0; i < n; ++i)    cin >> nums[i];
 	for (int i = 0; i < m; ++i) {
-		int u, v, w;
-		cin >> u >> v >> w;
-		g[u][v] = g[v][u] = w;
+		int u, v, t;
+		cin >> u >> v >> t;
+		g[u][v] = g[v][u] = t;
 	}
 
-	//2. MAIN LOGIC
+	/* 2. MAIN LOGIC */
 	dijkstra();
-	s = 0;
-	dfs_travesal_path(sp);
+	dfs(sp);
 
-	//3. OUTPUT LOGIC
-	cout << min_bikes << " 0";
-	for (int i = (int)path.size() - 1; i >= 0; --i)    cout << "->" << path[i];
-	cout << " " << ret;
+	/* 3. OUTPUT MODULE */
+	cout << min_sent << " ";
+	for (int i = (int)path.size() - 1; i >= 0; --i) {
+		cout << path[i];
+		if (i != 0)    cout << "->";
+	}
+	cout << " " << min_back;
 
 	return 0;
 }
