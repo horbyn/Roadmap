@@ -1,15 +1,7 @@
-/*
- * PA 15/25, 应该是思路错了
- *    我的思路是完全树有右孩子必有左孩子, 所以若有右孩子但无左孩子则不是完全树
- * PA 18/25:
- *    回看时发现输入结点数值是[0, 20], 所以不能用 char, 修改为 string 也 PA
- * 那确实思路有问题
- */
+/* 思路: 按完全树编号, 如果编号 == 结点数那就是完全树, 否则编号 > 结点数那就不是 */
 #include <iostream>
 #include <vector>
-#include <queue>
 #include <string>
-#include <cstring>
 using namespace std;
 
 typedef struct node_t {
@@ -18,84 +10,53 @@ typedef struct node_t {
 }node_t;
 
 const int maxn = 20;
-int n, last_node;
+int n;
+vector<int > inp[maxn];
 bool vis[maxn];
-vector<int > tree[maxn];
+int max_idx = -1, max_node = -1;
 
-/* 转换字符-整型 */
-int trans(string s) {
-	if (s != "-")    return atoi(s.c_str());
-	else    return -1;
-}
+/* 建树: 同时检查最大下标 */
+node_t* create(int d, int i) {//形参 d: 结点数据; 形参 i: 编号
+	if (d == -1)    return NULL;
 
-/* 建树: 根据邻接表建树 */
-node_t* create(int r) {
+	if (max_idx < i) {
+		max_idx = i;//更新最大下标
+		max_node = d;//同时记录这个下标对应的结点数据
+	}
+
 	node_t* node = new node_t;
-	node->data = r;
-
-	if (tree[r][0] == -1 && tree[r][1] == -1) {
-		node->left = node->right = NULL;
-	} else if (tree[r][0] == -1 && tree[r][1] != -1) {
-		node->left = NULL;
-		node->right = create(tree[r][1]);
-	} else if (tree[r][0] != -1 && tree[r][1] == -1) {
-		node->left = create(tree[r][0]);
-		node->right = NULL;
-	} else {
-		node->left = create(tree[r][0]);
-		node->right = create(tree[r][1]);
-	}
+	node->data = d;
+	node->left = create(inp[d][0], 2 * i);
+	node->right = create(inp[d][1], 2 * i + 1);
 	return node;
-}
-
-/* 层序遍历 */
-bool level_travesal(node_t* t) {
-	queue<node_t*> q;
-	q.push(t);
-	while (!q.empty()) {
-		node_t* front = q.front();
-		q.pop();
-
-		if (front->right && !front->left)    return false;
-		last_node = front->data;
-
-		if (front->left)    q.push(front->left);
-		if (front->right)    q.push(front->right);
-	}
-	return true;
 }
 
 int main() {
 	/* 1. INPUT MODULE */
 	cin >> n;
 	for (int i = 0; i < n; ++i) {
-		string l, r;
-		cin >> l >> r;
-		int le = trans(l), ri = trans(r);
-		tree[i].push_back(le);
-		tree[i].push_back(ri);
+		string s1, s2;
+		cin >> s1 >> s2;
+		if (s1 != "-")    inp[i].push_back(atoi(s1.c_str()));
+		else    inp[i].push_back(-1);
+		if (s2 != "-")    inp[i].push_back(atoi(s2.c_str()));
+		else    inp[i].push_back(-1);
 	}
 
 	/* 2. MAIN LOGIC */
-	//找出根结点: 遍历输入邻接表, 没出现的下标即根结点
+	//找根结点
+	for (int i = 0; i < n; ++i) {
+		if (inp[i][0] != -1 && !vis[inp[i][0]])    vis[inp[i][0]] = true;
+		if (inp[i][1] != -1 && !vis[inp[i][1]])    vis[inp[i][1]] = true;
+	}
 	int root = 0;
-	memset(vis, false, sizeof(vis));
-	for (int i = 0; i < n; ++i) {
-		if (tree[i][0] != -1)    vis[tree[i][0]] = true;
-		if (tree[i][1] != -1)    vis[tree[i][1]] = true;
-	}
-	for (int i = 0; i < n; ++i) {
-		if (!vis[i]) {
-			root = i;
-			break;
-		}
-	}
-	node_t* t = create(root);
-	bool flag = level_travesal(t);//层序遍历同时判断是否完全树
+	for (; root < n && vis[root]; ++root);
+	//建树
+	node_t* tree = create(root, 1);
 
 	/* 3. OUTPUT MODULE */
-	if (flag)    cout << "YES " << last_node;
-	else    cout << "NO " << root;
+	if (max_idx == n)    cout << "YES " << max_node;
+	else if (max_idx > n)    cout << "NO " << root;
 
 	return 0;
 }
