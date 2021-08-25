@@ -1,60 +1,85 @@
 #include <iostream>
+#include <queue>
 #include <vector>
 #include <algorithm>
 using namespace std;
 
-static const int maxn = 1000;
-static int grade[maxn] = { 0 };
+typedef struct mice_t {
+	int wei, idx, rank;
+}mic_t;
 
-static struct mice_t {
-	int idx;
-	int weight;
-}mice[maxn];
+const int maxn = 1000;
+int np, ng;
+mic_t mice[maxn];
+int seq[maxn];
+queue<int > que;
+vector<int > out[maxn], tmp;
 
-static bool cmp(struct mice_t a, struct mice_t b) {
-	return a.weight > b.weight;
+bool cmp(mic_t a, mic_t b) {
+	return a.idx < b.idx;
 }
 
 int main() {
-	int Np, Ng;
-
-	//1. INPUT
-	cin >> Np >> Ng;
-	for (int i = 0; i < Np; ++i) {
+	/* 1. INPUT MODULE */
+	cin >> np >> ng;
+	for (int i = 0; i < np; ++i) {
+		cin >> mice[i].wei;
 		mice[i].idx = i;
-		cin >> mice[i].weight;
 	}
-	vector<struct mice_t> init_order;
-	int idx;
-	for (int i = 0; i < Np; ++i) {
-		cin >> idx;
-		init_order.push_back(mice[idx]);
-	}
+	for (int i = 0; i < np; ++i)    cin >> seq[i];
 
-	//2. EXECUTE
-	int arr_rest_len = init_order.size();//数组剩余长度初始为全部
-	vector<struct mice_t> tmp;//保存每个 match 输掉的 mice
-	while (arr_rest_len != 1) {
-		int group = 0, base = 0, end = 0;
-		while (end < arr_rest_len) {//这个循环处理每一个 turn 的所有 match
-			int step = (arr_rest_len - base) < Ng ? (arr_rest_len - base) : Ng;
-			end += step;
-			sort(init_order.begin() + base, init_order.begin() + end, cmp);//相当于选出最大值
-			for (int i = base + 1; i < end; ++i)    tmp.push_back(init_order[i]);//除最大值外其他值都是输的，保存下来排名
-			struct mice_t fatest_mouse = init_order[base];
-			init_order[group++] = fatest_mouse;
-			base = end;
+	/* 2. MAIN LOGIC */
+	//初始队列
+	for (int i = 0; i < np; ++i)    que.push(seq[i]);
+	//比试
+	int ptr = -1;//指示输出数组
+	while (que.size() != 1) {
+		//初始化
+		ptr++;
+		int group = que.size() / ng;
+		int last = ng, len = ng;
+		if (que.size() % ng) {
+			group++;
+			last = que.size() % ng;
 		}
-		for (vector<struct mice_t>::iterator vi = tmp.begin();
-			vi != tmp.end(); ++vi)    grade[vi->idx] = group + 1;
-		arr_rest_len = group;
-		tmp.clear();
-	}
-	grade[init_order[0].idx] = 1;//最后退出循环时排第一的肯定是第一名
 
-	//3. OUTPUT
-	cout << grade[0];
-	for (int i = 1; i < Np; ++i)    cout << " " << grade[i];
+		for (int i = 0; i < group; ++i) {
+			if (i == group - 1)    len = last;
+			tmp.clear();
+
+			//组内比试: 挑出属于同一组的
+			for (int j = 0; j < len; ++j) {
+				tmp.push_back(que.front());
+				que.pop();
+			}
+
+			//找最大
+			int max = -1, max_idx = 0;
+			for (int j = 0; j < (int)tmp.size(); ++j) {
+				if (max < mice[tmp[j]].wei) {
+					max = mice[tmp[j]].wei;
+					max_idx = tmp[j];
+				}
+			}
+			que.push(max_idx);//最大的重新入队
+			for (int i = 0; i < (int)tmp.size(); ++i) {
+				if (tmp[i] == max_idx)    continue;
+				out[ptr].push_back(tmp[i]);//其余的进入输出数组
+			}
+		}
+	}
+	//遍历输出数组, 排名
+	mice[que.front()].rank = 1;
+	out[ptr + 1].push_back(que.front());
+	for (int i = ptr, rank = 1; i >= 0; --i) {
+		rank += out[i + 1].size();
+		for (int j = 0; j < (int)out[i].size(); ++j)    mice[out[i][j]].rank = rank;
+	}
+	sort(mice, mice + np, cmp);//按序号排序
+
+	/* 3. OUTPUT MODULE */
+	cout << mice[0].rank;
+	for (int i = 1; i < np; ++i)    cout << " " << mice[i].rank;
 
 	return 0;
 }
