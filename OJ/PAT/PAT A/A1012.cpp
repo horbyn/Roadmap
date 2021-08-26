@@ -1,74 +1,106 @@
-/*写在前面：连做带改用时165min
- *第一个问题：第一次做编译无论clang还是g++都总是爆堆栈错误，现象是
- *    main()开头打断点单步调试就ERROR退出
- *搞了很久才知道：大空间变量不能定义在函数内——main()也是函数，而将
- *    stu[MAXSIZE]、ran[10000000][4]等大空间变量定义为全局，通过
- *第二个问题：输出时的找最小——用"擂台法"最简单，但没注意用临时变量
- *    一个个"尝试"遍历后续序列，导致该最小变量不断被改变
-*/
 #include <iostream>
+#include <string>
+#include <map>
 #include <algorithm>
-
-#define MAXSIZE 2001
-
 using namespace std;
 
-struct stu_t {
-	int num;
-	int gra[4];//[0]='A'; [1]='C'; [2]='M'; [3]='E'
-};
+typedef struct student_t {
+	string id;
+	int c, m, e, a;
+	int rank[4];
+}stu_t;
 
-int cou = 0;//当前排序的科目course
-struct stu_t stu[MAXSIZE];
-int tmp[MAXSIZE];
-int ran[10000000][4] = { 0 };
+const int maxn = 2000;
+int n, m;
+stu_t stu[maxn];
+map<string, int > ma;
+string query[maxn];
 
-bool cmp(struct stu_t a, struct stu_t b) {
-	return a.gra[cou] > b.gra[cou];
+bool cmpa(stu_t a, stu_t b) {
+	return a.a > b.a;
+}
+
+bool cmpc(stu_t a, stu_t b) {
+	return a.c > b.c;
+}
+
+bool cmpm(stu_t a, stu_t b) {
+	return a.m > b.m;
+}
+
+bool cmpe(stu_t a, stu_t b) {
+	return a.e > b.e;
 }
 
 int main() {
-	int n, m, min, idx;
-
+	/* 1. INPUT MODULE */
 	cin >> n >> m;
-	//1. 处理输入，同时计算平均分
 	for (int i = 0; i < n; ++i) {
-		cin >> stu[i].num >> stu[i].gra[1]
-			>> stu[i].gra[2] >> stu[i].gra[3];
-
-		stu[i].gra[0] = (stu[i].gra[1] + stu[i].gra[2]
-			+ stu[i].gra[3]) / 3;
+		cin >> stu[i].id >> stu[i].c >> stu[i].m >> stu[i].e;
+		double sum = (double)stu[i].c + stu[i].m + stu[i].e;
+		stu[i].a = (int)(sum / 3 + 0.5);//四舍五入
 	}
-	for (int i = 0; i < m; ++i)    cin >> tmp[i];
+	for (int i = 0; i < m; ++i)    cin >> query[i];
 
-	//2. 外循环对每个科目排序，内循环记录该科目排名
-	for (; cou < 4; ++cou) {
-		sort(stu, stu + n, cmp);
-		ran[stu[0].num][cou] = 1;
-		for (int i = 1; i < n; ++i) {
-			if (stu[i].gra[cou] == stu[i - 1].gra[cou])
-				ran[stu[i].num][cou] = ran[stu[i - 1].num][cou];
-			else    ran[stu[i].num][cou] = i + 1;
-		}
+	/* 2. MAIN LOGIC */
+	//排序 A
+	sort(stu, stu + n, cmpa);
+	stu[0].rank[0] = 1;
+	for (int i = 1; i < n; ++i) {
+		if (stu[i].a == stu[i - 1].a)    stu[i].rank[0] = stu[i - 1].rank[0];
+		else    stu[i].rank[0] = i + 1;
 	}
+	//排序 C
+	sort(stu, stu + n, cmpc);
+	stu[0].rank[1] = 1;
+	for (int i = 1; i < n; ++i) {
+		if (stu[i].c == stu[i - 1].c)    stu[i].rank[1] = stu[i - 1].rank[1];
+		else    stu[i].rank[1] = i + 1;
+	}
+	//排序 M
+	sort(stu, stu + n, cmpm);
+	stu[0].rank[2] = 1;
+	for (int i = 1; i < n; ++i) {
+		if (stu[i].m == stu[i - 1].m)    stu[i].rank[2] = stu[i - 1].rank[2];
+		else    stu[i].rank[2] = i + 1;
+	}
+	//排序 E
+	sort(stu, stu + n, cmpe);
+	stu[0].rank[3] = 1;
+	for (int i = 1; i < n; ++i) {
+		if (stu[i].e == stu[i - 1].e)    stu[i].rank[3] = stu[i - 1].rank[3];
+		else    stu[i].rank[3] = i + 1;
+	}
+	//排好序后建立映射
+	for (int i = 0; i < n; ++i)    ma[stu[i].id] = i;
 
-	//3. 输出：要先找当前学生排名最高的科目
+	/* 3. OUTPUT MODULE */
 	for (int i = 0; i < m; ++i) {
-		if (!ran[tmp[i]][0])    cout << "N/A" << endl;
+		if (ma.find(query[i]) == ma.end())    cout << "N/A\n";
 		else {
-			min = ran[tmp[i]][0];
-			idx = 0;
-			for (int j = 0; j < 4; ++j) {
-				if (min > ran[tmp[i]][j]) {
-					min = ran[tmp[i]][j];
-					idx = j;
+			int idx = ma[query[i]];
+			int best = 0, rank = stu[idx].rank[0];
+
+			//找最好的科目
+			for (int j = 1; j < 4; ++j) {
+				if (rank > stu[idx].rank[j]) {
+					rank = stu[idx].rank[j];
+					best = j;
 				}
 			}
-			cout << min;
-			if (idx == 0)    cout << " " << 'A' << endl;
-			else if (idx == 1)    cout << " " << 'C' << endl;
-			else if (idx == 2)    cout << " " << 'M' << endl;
-			else if (idx == 3)    cout << " " << 'E' << endl;
+
+			//映射科目缩写
+			string subject;
+			switch (best) {
+				case 0: subject = "A"; break;
+				case 1: subject = "C"; break;
+				case 2: subject = "M"; break;
+				default: subject = "E"; break;
+			}
+
+			cout << rank << " " << subject << endl;
 		}
 	}
+
+	return 0;
 }

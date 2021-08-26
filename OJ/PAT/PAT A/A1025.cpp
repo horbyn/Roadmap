@@ -1,147 +1,60 @@
-/* access:
- * https://pintia.cn/problem-sets/994805342720868352/problems/994805474338127872
- * result: PA 13/25
- * duration: 144 mins
- */
-
- /*
-  * local:
-  *     read input to inp[]                     move inp[] to inp_sort[]
-  *             |                                           |
-  *             v                                           v
-  *  according "a.score > b.score"      =>    according "a.score > b.score"
-  *         to sort()                                   to sort()
-  *             |                                           |
-  *             v                                           v
-  *      set location number                        set local rank
-  *        set local rank  
-  */
-
-#include <cstdio>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <algorithm>
-
-#pragma warning(disable: 4996)
-
 using namespace std;
 
-#define MAXSIZE 30000
+typedef struct record_t {
+	string id;
+	int score, addr, rank_local, rank_total;
+}rec_t;
 
-typedef struct testee {
-    long long registration_number;
-    int score;
-    int final_rank;
-    int location_number;
-    int local_rank;
-}testee_t;
+const int maxn = 30001;
+int n, k;
+vector<rec_t > people;
 
-testee_t inp[300] = { 0 };
-testee_t inp_sort[MAXSIZE] = { 0 };
-static int location_no = 1;
-static int final_testee_num = 0;
-
-void read_input(void);
-void manual_sort(int, bool);
+bool cmp(rec_t a, rec_t b) {
+	if (a.score != b.score)    return a.score > b.score;
+	else    return a.id < b.id;
+}
 
 int main() {
-    // input module
-    read_input();
+	/* 1. INPUT MODULE */
+	int beg = 0, end = 0;
+	cin >> n;
+	for (int i = 1; i <= n; ++i) {
+		cin >> k;
+		end += k;
+		//输入
+		for (int j = 0; j < k; ++j) {
+			rec_t tmp;
+			cin >> tmp.id >> tmp.score;
+			tmp.addr = i;
+			people.push_back(tmp);
+		}
 
-    // calculate module
-    manual_sort(final_testee_num, 1);
+		//局部排序
+		sort(people.begin() + beg, people.begin() + end, cmp);
+		people[beg].rank_local = 1;
+		for (int j = beg + 1; j < end; ++j) {
+			if (people[j].score == people[j - 1].score)    people[j].rank_local = people[j - 1].rank_local;
+			else    people[j].rank_local = j - beg + 1;
+		}
+		beg = end;
+	}
 
-    // output module
-    printf("%d\n", final_testee_num);
-    for (int i = 0; i < final_testee_num; i++) {
-        printf("%lld %d %d %d\n",
-            inp_sort[i].registration_number,
-            inp_sort[i].final_rank,
-            inp_sort[i].location_number,
-            inp_sort[i].local_rank
-        );
-    }
+	/* 2. MAIN LOGIC */
+	//总体排序
+	sort(people.begin(), people.end(), cmp);
+	people[0].rank_total = 1;
+	for (int i = 1; i < end; ++i) {
+		if (people[i].score == people[i - 1].score)    people[i].rank_total = people[i - 1].rank_total;
+		else    people[i].rank_total = i + 1;
+	}
 
-    return 0;
+	/* 3. OUTPUT MODULE */
+	cout << end << endl;
+	for (int i = 0; i < end; ++i)    cout << people[i].id << " " << people[i].rank_total << " " << people[i].addr << " " << people[i].rank_local << endl;
+
+	return 0;
 }
-
-void read_input() {
-    int test_location;
-    int testee_num;
-    int i, j, k;
-
-    scanf("%d", &test_location);
-    for (i = 0; i < test_location; i++) {
-        // input module
-        scanf("%d", &testee_num);
-        for (j = 0; j < testee_num; j++) {
-            scanf("%lld%d", &inp[j].registration_number, &inp[j].score);
-        }
-
-        // calculate module
-        manual_sort(testee_num, 0);                             // calculate local rank
-        location_no++;
-        // move local input to fianl input
-        for (j = final_testee_num, k = 0; j < final_testee_num + testee_num; j++, k++) {
-            inp_sort[j] = inp[k];
-        }
-        final_testee_num += testee_num;                         // renew testees num
-    }
-}
-
-bool cmp(testee_t a, testee_t b) {
-    return a.score > b.score;
-}
-
-/*
- * flag = 0: rank is local_rank
- * flag = 1: rank is final_rank
- */
-void manual_sort(int inp_num, bool flag) {
-    // judge
-    if (!flag) {
-        sort(inp, inp + inp_num, cmp);                          // sort() sorted in nondecreasing order
-
-        inp[0].local_rank = 1;                                  // set fst person rank to 1
-        for (int i = 0; i < inp_num; i++) {
-            if (!i) {
-                inp[i].location_number = location_no;
-                continue;
-            }
-
-            // set localtion number
-            if (!flag) {
-                inp[i].location_number = location_no;
-            }
-
-            // set rank number
-            if (inp[i].score == inp[i - 1].score) {             // cur score is same as pre, set the same rank
-                inp[i].local_rank = inp[i - 1].local_rank;
-            }
-            else {                                              // otherwise rank plus
-                inp[i].local_rank = i + 1;
-            }
-        }
-    }
-    else {
-        sort(inp_sort, inp_sort + inp_num, cmp);                // sort() sorted in nondecreasing order
-
-        inp_sort[0].final_rank = 1;                             // set fst person rank to 1
-        for (int i = 0; i < inp_num; i++) {
-            // set rank number
-            if (inp_sort[i].score == inp_sort[i - 1].score) {   // cur score is same as pre, set the same rank
-                inp_sort[i].final_rank = inp_sort[i - 1].final_rank;
-            }
-            else {                                              // otherwise rank plus
-                inp_sort[i].final_rank = i + 1;
-            }
-        }
-    }
-}
-
-/*
-Fst submit:
-Case    Result	        Run Time	Memory
-0       Accepted        3 ms	    328 KB
-1       Wrong Answer    3 ms	    228 KB
-2       Wrong Answer    3 ms	    224 KB
-3       Wrong Answer    37 ms	    1664 KB
-*/
