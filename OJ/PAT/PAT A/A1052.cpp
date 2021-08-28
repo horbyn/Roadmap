@@ -1,17 +1,17 @@
+#include <iostream>
 #include <cstdio>
 #include <algorithm>
-#pragma warning(disable: 4996)//VS 使用 scanf() 要忽略警告
 using namespace std;
 
 typedef struct node_t {
-	int beg, key, nxt, flag;
+	int addr, key, next;
+	int flag;
 }node_t;
 
 const int maxn = 100000;
 int n;
-node_t node[maxn];
+node_t link[maxn];
 
-/* 比较函数 */
 bool cmp(node_t a, node_t b) {
 	if (a.flag != b.flag)    return a.flag > b.flag;
 	else    return a.key < b.key;
@@ -20,28 +20,31 @@ bool cmp(node_t a, node_t b) {
 int main() {
 	/* 1. INPUT MODULE */
 	int base;
-	scanf("%d%d", &n, &base);
+	cin >> n >> base;
 	for (int i = 0; i < n; ++i) {
 		int idx;
-		scanf("%d", &idx);
-		node[idx].beg = idx;
-		scanf("%d%d", &node[idx].key, &node[idx].nxt);
+		cin >> idx;
+		link[idx].addr = idx;
+		cin >> link[idx].key >> link[idx].next;
 	}
 
 	/* 2. MAIN LOGIC */
-	for (int i = base; i != -1; i = node[i].nxt)    node[i].flag = 1;
-	sort(node, node + maxn, cmp);
-	for (int i = 0; i < n; ++i) {//重新组织链表关系
-		if (i == n - 1)    node[i].nxt = -1;
-		else    node[i].nxt = node[i + 1].beg;
+	int num = 0;
+	for (int i = base; i != -1; i = link[i].next) {
+		num++;
+		link[i].flag = 1;
 	}
+	sort(link, link + maxn, cmp);
 
 	/* 3. OUTPUT MODULE */
-	printf("%d %05d\n", n, node[0].beg);
-	for (int i = 0; i < n; ++i) {
-		printf("%05d %d ", node[i].beg, node[i].key);
-		if (i == n - 1)    printf("-1\n");
-		else    printf("%05d\n", node[i].nxt);
+	if (num == 0)    printf("0 -1\n");
+	else {
+		printf("%d %05d\n", num, link[0]);
+		for (int i = 0; i < num; ++i) {
+			printf("%05d %d ", link[i].addr, link[i].key);
+			if (i == num - 1)    printf("-1\n");
+			else    printf("%05d\n", link[i + 1].addr);
+		}
 	}
 
 	return 0;
