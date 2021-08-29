@@ -1,14 +1,45 @@
-/* PA, 19/25 */
 #include <iostream>
 #include <vector>
+#include <cstring>
 using namespace std;
 
-const int maxn = 200;
+const int maxn = 201, inf = 0x3fffffff;
 int nv, ne, m;
 int graph[maxn][maxn];
 vector<int > query[maxn];
+bool inq[maxn];
+
+bool judge_near(int i) {
+	for (int j = 0; j < (int)query[i].size() - 1; ++j) {
+		int u = query[i][j];
+		for (int k = j + 1; k < (int)query[i].size(); ++k) {
+			int v = query[i][k];
+			if (graph[u][v] == inf)    return false;
+		}
+	}
+	return true;
+}
+
+bool judge_max(int i) {
+	for (int u = 1; u <= nv; ++u) {
+		if (inq[u])    continue;
+
+		int num = 0;//相邻的顶点数
+		for (int j = 0; j < (int)query[i].size(); ++j) {
+
+			int v = query[i][j];
+			if (graph[u][v] != inf)    num++;//相邻
+		}
+
+		if (num == (int)query[i].size())    return false;//任一点与 query[i] 所有都相邻
+	}
+	return true;
+}
 
 int main() {
+	/* 0. INITIALIZATION */
+	fill(graph[0], graph[0] + maxn * maxn, inf);
+
 	/* 1. INPUT MODULE */
 	cin >> nv >> ne;
 	for (int i = 0; i < ne; ++i) {
@@ -21,47 +52,24 @@ int main() {
 		int k;
 		cin >> k;
 		for (int j = 0; j < k; ++j) {
-			int inp;
-			cin >> inp;
-			query[i].push_back(inp);
+			int tmp;
+			cin >> tmp;
+			query[i].push_back(tmp);
 		}
 	}
 
 	/* 2. MAIN LOGIC */
 	for (int i = 0; i < m; ++i) {
-		bool flag = true;
-		//判 query 里给出的顶点是否两两相邻
-		for (int j = 0; j < (int)query[i].size() && flag; ++j) {
-			int u = query[i][j];
-			for (int k = j + 1; k < (int)query[i].size() && flag; ++k) {
-				int v = query[i][k];
-				if (graph[u][v] == 0)    flag = false;
-			}
-		}
 		/* 3. OUTPUT MODULE */
-		if (!flag) {
-			cout << "Not a Clique\n";
-			continue;
-		}
+		if (judge_near(i) == false)    cout << "Not a Clique\n";
+		else {
+			//记录 query 有哪些点
+			memset(inq, false, sizeof(inq));
+			for (int j = 0; j < (int)query[i].size(); ++j)    inq[query[i][j]] = true;
 
-		//判若多加入一个顶点是否还能两两相邻
-		int u = 1;
-		for (; u <= nv; ++u) {//图点集: 遍历每个顶点[1, nv]
-			int num = 0;
-			for (int j = 0; j < (int)query[i].size(); ++j) {
-				int v = query[i][j];
-				if (u == v)    break;//跳过已在 query 内的顶点
-
-				if (graph[u][v] == 1)    num++;//当前顶点 u 与 query[] 元素相邻
-			}
-			if (num == (int)query[i].size()) {//与 query[] 每一个都相邻那么 num = size
-				/* 3. OUTPUT MODULE */
-				cout << "Not Maximal\n";
-				break;
-			}
+			if (judge_max(i) == false)    cout << "Not Maximal\n";
+			else    cout << "Yes\n";
 		}
-		/* 3. OUTPUT MODULE */
-		if (u == nv + 1)    cout << "Yes\n";
 	}
 
 	return 0;
