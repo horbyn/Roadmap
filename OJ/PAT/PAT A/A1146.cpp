@@ -1,11 +1,13 @@
 #include <iostream>
 #include <vector>
+#include <cstring>
 using namespace std;
 
 const int maxn = 1001;
 int n, m, k;
-int in[maxn];
-vector<int > out[maxn], query[maxn], judge;
+int degree[maxn], query[maxn][maxn];
+int duplication[maxn];
+vector<int > graph[maxn], outcome;
 
 int main() {
 	/* 1. INPUT MODULE */
@@ -13,47 +15,37 @@ int main() {
 	for (int i = 0; i < m; ++i) {
 		int u, v;
 		cin >> u >> v;
-		out[u].push_back(v);
+		graph[u].push_back(v);
+		degree[v]++;//统计入度
 	}
 	cin >> k;
-	for (int i = 0; i < k; ++i) {
-		for (int j = 0; j < n; ++j) {
-			int inp;
-			cin >> inp;
-			query[i].push_back(inp);
-		}
-	}
+	for (int i = 0; i < k; ++i)
+		for (int j = 0; j < n; ++j)
+			cin >> query[i][j];
 
 	/* 2. MAIN LOGIC */
-	//计算入度
-	for (int i = 1; i <= n; ++i) {
-		if (out[i].size()) {
-			for (int j = 0; j < (int)out[i].size(); ++j)    in[out[i][j]]++;
-		}
-	}
-	//遍历 query
 	for (int i = 0; i < k; ++i) {
-		bool flag = true;
-		vector<int > in_dup(begin(in), end(in));
+		//copy 入度
+		for (int j = 1; j <= n; ++j)    duplication[j] = degree[j];
 
-		for (int j = 0; j < (int)query[i].size() && flag; ++j) {
+		//遍历 query[i]
+		for (int j = 0; j < n; ++j) {
 			int u = query[i][j];
-			if (in_dup[u] == 0) {//只有当入度为 0 时才能摘掉该点
-				for (int k = 0; k < (int)out[u].size(); ++k) {
-					int v = out[u][k];
-					in_dup[v]--;//摘掉该点同时将其出点, 入度--
-				}
-			} else {
-				judge.push_back(i);
-				flag = false;
+			if (duplication[u] != 0) {
+				outcome.push_back(i);
 				break;
+			}
+
+			for (int k = 0; k < (int)graph[u].size(); ++k) {
+				int v = graph[u][k];
+				duplication[v]--;
 			}
 		}
 	}
 
 	/* 3. OUTPUT MODULE */
-	cout << judge[0];
-	for (int i = 1; i < (int)judge.size(); ++i)    cout << " " << judge[i];
+	if (!outcome.empty())    cout << outcome[0];
+	for (int i = 1; i < (int)outcome.size(); ++i)    cout << " " << outcome[i];
 
 	return 0;
 }
