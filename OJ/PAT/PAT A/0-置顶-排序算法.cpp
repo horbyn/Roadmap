@@ -103,8 +103,7 @@ void merge(int l, int r, int rE) {
 	while (l <= lE)    tmp[p++] = a[l++];
 	while (r <= rE)    tmp[p++] = a[r++];
 
-	--p;
-	for (int i = 0; i < num; ++i, --p)    a[p] = tmp[p];
+	for (int i = 0; i < num; ++i, --rE)    a[rE] = tmp[rE];
 }
 
 //归并附件二
@@ -129,8 +128,8 @@ int main() {
 	//insertion_sort();
 	//bubble_sort();
 	//heap_sort();
-	//merge_sort();
-	quick_sort(0, n - 1);
+	merge_sort();
+	//quick_sort(0, n - 1);
 
 	//OUTPUT
 	for (int i = 0; i < n; ++i)    cout << a[i] << " ";///除堆排外其他函数的输出
