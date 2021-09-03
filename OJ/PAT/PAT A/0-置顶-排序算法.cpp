@@ -3,7 +3,6 @@
  * 冒泡排序(交换排序)->快速排序
  * 归并排序
  */
-/* 相关题: A1098、A1089、A1101 */
 #include <iostream>
 using namespace std;
 
@@ -22,7 +21,7 @@ void swap(int* a, int* b) {
 void selection_sort() {
 	for (int i = 0; i < n - 1; ++i) {
 		int min = i;
-		for (int j = i; j < n; ++j)
+		for (int j = i + 1; j < n; ++j)
 			if (a[min] > a[j])    min = j;
 		swap(a[i], a[min]);
 	}
@@ -49,7 +48,7 @@ void bubble_sort() {
 void adjust_down(int l, int h) {
 	int i = l, j = 2 * i;
 	while (j <= h) {
-		if (j + 1 < h && heap[j + 1] > heap[j])    j++;
+		if (j + 1 <= h && heap[j + 1] > heap[j])    j++;
 
 		if (heap[i] < heap[j]) {
 			swap(heap[i], heap[j]);
@@ -60,15 +59,12 @@ void adjust_down(int l, int h) {
 	}
 }
 
-//堆排(即选择)附件二
-void create_heap() {
-	for (int i = n / 2; i >= 1; --i)    adjust_down(i, n);
-}
-
 //堆排(即选择)
 void heap_sort() {
-	create_heap();
+	//建堆
+	for (int i = n / 2; i >= 1; --i)    adjust_down(i, n);
 
+	//排序
 	for (int i = n; i > 1; --i) {
 		swap(heap[1], heap[i]);
 		adjust_down(1, i - 1);
@@ -124,11 +120,11 @@ void merge_sort() {
 
 int main() {
 	//EXECUATE
-	//selection_sort();
+	selection_sort();
 	//insertion_sort();
 	//bubble_sort();
 	//heap_sort();
-	merge_sort();
+	//merge_sort();
 	//quick_sort(0, n - 1);
 
 	//OUTPUT
