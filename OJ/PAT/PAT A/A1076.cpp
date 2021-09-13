@@ -1,67 +1,75 @@
 #include <iostream>
-#include <cstring>
 #include <vector>
 #include <queue>
+#include <cstring>
 using namespace std;
 
-struct graph_t {
-	int level;
-	vector<int > followers;
-};
-static const int maxn = 1001;
-static int l, num;
-static graph_t user[maxn];
-static bool vis[maxn];
+typedef struct vertex_t {
+	int v, level;
+}ver_t;
 
-void bfs(int u) {
-	queue<graph_t > q;
-	user[u].level = 0;
-	q.push(user[u]);
-	vis[u] = true;
+const int maxn = 1001;
+int n, l, k;
+vector<ver_t > graph[maxn];
+vector<int > query;
+bool inq[maxn];
 
+int bfs(int s) {
+	queue<ver_t > q;
+	ver_t tmp;
+	tmp.level = 0;
+	tmp.v = s;
+	q.push(tmp);
+	inq[s] = true;
+	int num = 0;
 	while (!q.empty()) {
-		graph_t v = q.front();
+		ver_t front = q.front();
 		q.pop();
-		for (int i = 0; i < (int)v.followers.size() && v.level < l; ++i) {
-			int follower = v.followers[i];
-			if (!vis[follower]) {
-				user[follower].level = v.level + 1;
+
+		for (int i = 0; i < (int)graph[front.v].size(); ++i) {
+			ver_t nxt = graph[front.v][i];
+			nxt.level = front.level + 1;
+			if (nxt.level > l)    break;
+
+			if (!inq[nxt.v]) {
+				q.push(nxt);
+				inq[nxt.v] = true;
 				num++;
-				q.push(user[follower]);
-				vis[follower] = true;
 			}
 		}
 	}
+
+	return num;
 }
 
 int main() {
-	int n;
-
-	/* 1. INPUT */
+	/* 1. INPUT MODULE */
 	cin >> n >> l;
 	for (int i = 1; i <= n; ++i) {
-		int m, inp;
+		int m;
 		cin >> m;
 		for (int j = 0; j < m; ++j) {
-			cin >> inp;
-			user[inp].followers.push_back(i);
+			int tmp;
+			cin >> tmp;
+			ver_t ver;
+			ver.v = i; ver.level = 0;
+			graph[tmp].push_back(ver);
 		}
+	}
+	cin >> k;
+	for (int i = 0; i < k; ++i) {
+		int tmp;
+		cin >> tmp;
+		query.push_back(tmp);
 	}
 
 	/* 2. MAIN LOGIC */
-	int k, inp;
-	cin >> k;
-	vector<int > out;
 	for (int i = 0; i < k; ++i) {
-		cin >> inp;
-		num = 0;
-		memset(vis, 0, maxn);
-		bfs(inp);
-		out.push_back(num);
-	}
+		memset(inq, false, sizeof(inq));
 
-	/* 3. OUTPUT */
-	for (int i = 0; i < (int)out.size(); ++i)    cout << out[i] << endl;
+		/* 3. OUTPUT MODULE */
+		cout << bfs(query[i]) << endl;
+	}
 
 	return 0;
 }
