@@ -1,16 +1,15 @@
-int* twoSum(int* nums, int numsSize, int target, int* returnSize){
-    int *res = (int *)malloc(sizeof(int) * 2);              // restore result
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        map<int, int > mp;
 
-    for(int i = 0; i < numsSize - 1; i++){
-        for(int j = i + 1; j < numsSize; j++){
-            if(nums[i] + nums[j] == target){
-                res[0] = i;
-                res[1] = j;
-                *returnSize = 2;
-                return res;
-            }
-        }
+	for (int i = 0; i < nums.size(); ++i) {
+	    map<int, int >::iterator it = mp.find(target - nums[i]);
+
+	    if (it == mp.end())    mp[nums[i]] = i;
+	    else    return {it->second, i};//C++ 返回数组可以直接用{}
+	}
+
+	return {};
     }
-
-    return res;
-}
+};
