@@ -2,41 +2,29 @@
 #include <string>
 using namespace std;
 
-int a, b;
-
 int main() {
-	/* 1. INPUT MODULE */
-	cin >> a >> b;
+	//1. INPUT MODULE
+	string sa(""), sb("");
+	int a = 0, b = 0, c = 0;
 
-	/* 2. MAIN LOGIC */
-	string str("");
-	int sum = a + b;
-	bool flag = sum < 0 ? true : false;
-	if (sum < 0)    sum = -sum;
-	//处理低三位
-	for (int i = 0; i < 3; ++i) {
-		int rem = sum % 10;
-		char ch = (char)(rem + '0');
-		str = ch + str;
-		sum /= 10;
-		if (sum == 0)    break;//数值是 0 一定要退出！！
+	//2. MAIN MODULE
+	cin >> sa >> sb;
+	a = stoi(sa);
+	b = stoi(sb);
+	c = a + b;
+	bool nega = false;
+	if (c < 0) {
+		c = -c;
+		nega = true;
 	}
-	//处理更高位(如果有)
-	int digit = 2;
-	while (sum) {
-		if (++digit == 3) {
-			str = "," + str;
-			digit = 0;
-		}
-		int rem = sum % 10;
-		char ch = (char)(rem + '0');
-		str = ch + str;
-		sum /= 10;
-	}
+	string sum = to_string(c);
 
-	/* 3. OUTPUT MODULE */
-	if (flag)    cout << "-";
-	cout << str;
+	//3. OUTPUT MODULE
+	if (sum.size() > 3)
+		for (int i = sum.size() - 3; i > 0; i -= 3)
+			sum.insert(i, string(","));
+	if (nega)    cout << "-";
+	cout << sum << endl;
 
 	return 0;
 }
