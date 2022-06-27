@@ -1,9 +1,21 @@
 # Cpp Primer 5ed Study
 
-## Note:
-* Compiler: gcc 7.5.0/g++ 7.5.0
+## Notes
 
-## Contents
-* [Chapter 1. Getting Started](Ch01/README.md)
-* [Chapter 2. Variables and Basic Types](Ch02/README.md)
-* [Chapter 3. Strings, vectors, and arrays](Ch03/README.md)
+- Linux kernel version: 5.10.16.3-microsoft-standard-WSL2
+- Linux distributions version: Ubuntu 20.04.4 LTS
+- Compiler: gcc 9.4.0/g++ 9.4.0
+
+<br></br>
+
+## Thoughts
+
+- [Cpp learning](./cpplearning.md)
+
+<br></br>
+
+## Exers
+
+- [Chapter 1. Getting Started](Ch01/README.md)
+
+<br></br>
