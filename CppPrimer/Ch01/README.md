@@ -119,3 +119,63 @@
 - accumulating the sum from -100 to 100, and the final is 0
 
 <br></br>
+
+## Exer 1.13
+
+>  Rewrite the exercises from § 1.4.1 (p. 13) using for loops
+
+[run exer1-13.sh](exer1-13.sh)
+
+<br></br>
+
+## Exer 1.14
+
+> Compare and contrast the loops that used a for with those using a while. Are there advantages or disadvantages to using either form?
+
+- `for()` uses no temporary invarible while `while()` uses
+
+<br></br>
+
+## Exer 1.15
+
+> Write programs that contain the common errors discussed in the box on page 16. Familiarize yourself with the messages the compiler generates
+
+- skip
+
+<br></br>
+
+## Exer 1.16
+
+> Write your own version of a program that prints the sum of a set of integers read from cin.
+
+[run exer1-16.sh](exer1-16.sh)
+
+<br></br>
+
+## Exer 1.17
+
+> What happens in the program presented in this section if the input values are all equal? What if there are no duplicated values?
+
+- All numbers are in one line. There are many lines with the count always 1.
+
+<br></br>
+
+## Exer 1.18
+
+> Compile and run the program from this section giving it only equal values as input. Run it again giving it values in which no number is repeated.
+
+[run exer1-18.sh](exer1-18.sh)
+
+<br></br>
+
+## Exer 1.19
+
+> Revise the program you wrote for the exercises in § 1.4.1 (p.13) that printed a range of numbers so that it handles input in which the first number is smaller than the second.
+
+[run exer1-19.sh](exer1-19.sh)
+
+<br></br>
+
+## Exer 1.20
+
+> 
