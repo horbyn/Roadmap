@@ -178,4 +178,47 @@
 
 ## Exer 1.20
 
-> 
+> http://www.informit.com/title/032174113 contains a copy of Sales_item.h in the Chapter 1 code directory. Copy that file to your working directory. Use it to write a program that reads a set of book sales transactions, writing each transaction to the standard output.
+
+[run exer1-20.sh](exer1-20.sh)
+
+```shell
+# input: 
+0-201-70353-x 4 24.99
+```
+
+<br></br>
+
+## Exer 1.21
+
+> Write a program that reads two Sales_item objects that have the same ISBN and produces their sum.
+
+[run exer1-21.sh](exer1-21.sh)
+
+```shell
+# input: 
+0-201-78345-X 3 20.00
+0-201-78345-X 2 25.00
+```
+
+<br></br>
+
+## Exer 1.22
+
+> Write a program that reads several transactions for the same ISBN. Write the sum of all the transactions that were read.
+
+[run exer1-22.sh](exer1-22.sh)
+
+```shell
+# input: 
+0-201-78345-X 3 20.00
+0-201-78345-X 2 25.00
+```
+
+<br></br>
+
+## Exer 1.23
+
+> Write a program that reads several transactions and counts how many transactions occur for each ISBN.
+
+
