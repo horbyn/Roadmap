@@ -221,4 +221,50 @@
 
 > Write a program that reads several transactions and counts how many transactions occur for each ISBN.
 
+[run exer1-23.sh](exer1-23.sh)
 
+```shell
+# input: 
+0-201-78345-X occurs 3
+0-201-78325-X occurs 6
+0-201-78315-X occurs 3
+0-201-78346-X occurs 2
+0-201-78347-X occurs 1
+0-201-79345-X occurs 1
+```
+
+<br></br>
+
+## Exer 1.24
+
+> Test the previous program by giving multiple transactions representing multiple ISBNs. The records for each ISBN should be grouped together.
+
+[run exer1-24.sh](exer1-24.sh)
+
+```shell
+# input: 
+0-201-70353-X occurs 1
+0-201-82470-1 occurs 1
+0-201-88954-4 occurs 4
+0-399-82477-1 occurs 2
+0-201-78345-X occurs 2
+```
+
+<br></br>
+
+## Exer 1.25
+
+> Using the Sales_item.h header from the Web site, compile and execute the bookstore program presented in this section
+
+[run exer1-25.sh](exer1-25.sh)
+
+```shell
+# input: 
+0-201-70353-X 4 99.96 24.99
+0-201-82470-1 4 181.56 45.39
+0-201-88954-4 16 198 12.375
+0-399-82477-1 5 226.95 45.39
+0-201-78345-X 5 110 22
+```
+
+<br></br>
