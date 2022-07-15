@@ -26,4 +26,133 @@
 
 <br></br>
 
+# Section 1.4.3
 
+读入不定输入
+
+```cpp
+int value = 0;
+while (std::cin >> value) {
+    /* TODO */
+}
+```
+
+这里条件是 `std::cin >> value`，返回的是 `istream` 对象，实际上测试的条件是 `stream` 的状态，如果状态无效即条件判定为假
+
+关于 `stream` 状态是这么规定的：
+
+- 有效：`stream` 没有出错
+- 无效：无效输入或遇到 `EOF`
+
+此处是 `istream` 对象，且输入类型为 `int`，因此无效输入的定义是输入了非 `int` 数据
+
+至于 `EOF`，需要手动输入，`Windows` 需要输入 `ctrl + z`；`unix/mac` 需要输入 `ctrl + d` / `control + d`
+
+<br></br>
+
+# Section 1.5
+
+从 `C++` 语言设计层面来说，要让类类型和内置类型表现得差不多
+
+<br></br>
+
+# Section 2.1.2
+
+如果赋值给无符号类型一个超出它自身范围的值时，结果是初始值对无符号类型表示数值总数取模后的余数（比如向 `8` 比特无符号数赋值 `256`，结果为 `256` 取模 `256`（`8` 比特表示数值总数）的余数，即 0）
+
+```c
+#include <cstdio>
+
+int main() {
+        unsigned char uc = 5;
+        printf("%u\n", uc);
+        uc = 256;
+        printf("%u\n", uc);
+        uc = 260;
+        printf("%u\n", uc);
+        return 0;
+}
+```
+
+如果赋值给有符号类型一个超出它表示范围的值时，结果是未定义的
+
+<br></br>
+
+# Section 2.1.3
+
+字面值即直接的数字，字面值也是有范围的，其范围如下：
+
+- 十进制字面值：
+    `int`、`long` 和 `long long` 当中尺寸最小那个（比如，在 `x86_64` 上分别是 `4`、`8` 和 `8` 字节，则范围为四字节的 `int`，即 (2<sup>31</sup> - 1)）
+- 八进制和十六进制字面值：
+    `int`、`unsigned int`、`long`、`unsigned long`、`long long` 和 `unsigned long long` 当中尺寸最小那个
+
+```cpp
+/* 以下是测试程序 */
+/* 主要是测试将 2^31、2^31 - 1、2^32、2^32 - 1 赋值给 int */
+#include <iostream>
+using namespace std;
+
+int main(int argc, char *argv[]) {
+    cout << "===============================" << endl;
+    cout << "2^31 = 2,147,483,648" << endl;
+
+    cout << "2^31 - 1 assigns to int variable a: " << endl;
+    int a = 2147483647;
+    cout << "\ta = " << a << endl;
+    cout << "2^31 assigns to int variable b: " << endl;
+    int b = 2147483648;
+    cout << "\tb = " << b << endl << endl;
+
+    cout << "===============================" << endl;
+    cout << "2^32 = 4,294,967,296" << endl;
+
+    cout << "2^32 - 1 assigns to int variable c: " << endl;
+    int c = 4294967295;
+    cout << "\tc = " << c << endl;
+    cout << "2^32 assigns to int variable d: " << endl;
+    int d = 4294967296;
+    cout << "\td = " << d << endl;
+
+    return 0;
+}
+```
+
+输出结果如下：
+
+```shell
+[root@xxx]# g++ -std=c++11 test2.cpp -o test2
+test2.cpp: In function ‘int main(int, char**)’:
+test2.cpp:22:13: warning: overflow in conversion from ‘long int’ to ‘int’ changes value from ‘4294967296’ to ‘0’ [-Woverflow]
+   22 |     int d = 4294967296;
+      |             ^~~~~~~~~~
+
+[root@xxx]# ./test2
+===============================
+2^31 = 2,147,483,648
+2^31 - 1 assigns to int variable a: 
+        a = 2147483647
+2^31 assigns to int variable b: 
+        b = -2147483648
+
+===============================
+2^32 = 4,294,967,296
+2^32 - 1 assigns to int variable c: 
+        c = -1
+2^32 assigns to int variable d: 
+        d = 0
+```
+
+输出结果可能很迷惑，但主要关注内存数据就很清晰了：
+
+```shell
+2^31            0x7f ff ff ff
+2^31 - 1        0x80 00 00 00
+2^32            0xff ff ff ff
+2^32 - 1        0x00 00 00 00
+```
+
+需要注意的是：
+
+- 如果字面值超出与其关联的最大的范围，则产生错误
+- `short` 没有对应的字面值
