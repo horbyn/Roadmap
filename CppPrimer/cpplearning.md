@@ -80,6 +80,8 @@ int main() {
 
 # Section 2.1.3
 
+## 数值字面值赋值
+
 字面值即直接的数字，字面值也是有范围的，其范围如下：
 
 - 十进制字面值：
@@ -156,3 +158,25 @@ test2.cpp:22:13: warning: overflow in conversion from ‘long int’ to ‘int�
 
 - 如果字面值超出与其关联的最大的范围，则产生错误
 - `short` 没有对应的字面值
+
+<br></br>
+
+## 字面值常量
+
+多个字符串字面值紧邻且仅由空格、缩进和换行分隔，则编译器会当成整体
+
+```cpp
+// 适用于一行写不下，分两行来写的字符串
+std::cout << "a really, really long string literal "
+ "that spans two lines" << std::endl;
+```
+
+<br></br>
+
+# Section 2.2
+
+## 初始化与赋值不同
+
+初始化是创建对象的同时赋予一个初始值；而赋值是用一个新值覆盖对象原值
+
+
