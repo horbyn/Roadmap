@@ -203,3 +203,47 @@
 - legally, and it will print `"100 45"`
 
 <br></br>
+
+## Exer 2.15
+
+> Which of the following definitions, if any, are invalid? Why?
+> (a) int ival = 1.01;
+> (b) int &rval1 = 1.01;
+> (c) int &rval2 = ival;
+> (d) int &rval3;
+
+- (b) invalid: must bound to an object
+- (d) invalid: must be assigned during initialization
+
+<br></br>
+
+## Exer 2.16
+
+> Which, if any, of the following assignments are invalid? If they are valid, explain what they do.
+> `int i = 0, &r1 = i; double d = 0, &r2 = d;`
+> (a) r2 = 3.14159;
+> (b) r2 = r1;
+> (c) i = r2;
+> (d) r1 = d;
+
+- **(a):** valid, assign `3.14159` to `r2` which is equal to assign to `d`
+- **(b):** ~~invalid~~(**valid, that is equal to assign `i` to `d`**)
+- **(c):** valid, assign `r2` to `i` that will lose precision
+- **(d):** valid, assign `d` to `r1` which is equal to assign to `i`. But there will lose precision
+
+<br></br>
+
+## Exer 2.17
+
+> What does the following code print?
+> ```cpp
+> int i, &ri = i;
+> i = 5; ri = 10;
+> std::cout << i << " " << ri << std::endl;
+> ```
+
+- `10 10`
+
+<br></br>
+
+
