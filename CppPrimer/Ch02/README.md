@@ -246,4 +246,104 @@
 
 <br></br>
 
+## Exer 2.18
+
+> Write code to change the value of a pointer. Write code to change the value to which the pointer points.
+
+[run exer2-18.sh](exer2-18.sh)
+
+<br></br>
+
+## Exer 2.19
+
+> Explain the key differences between pointers and references.
+
+- Assignment: pointers can reassign but references cannot
+- Initialization: pointers need not but references must
+
+<br></br>
+
+## Exer 2.20
+
+> What does the following program do?
+> ```cpp
+> int i = 42;
+> int *p1 = &i;
+> *p1 = *p1 * *p1;
+> ```
+
+- `i` is `42` * `42`
+
+<br></br>
+
+## Exer 2.21
+
+> Explain each of the following definitions. Indicate whether any are illegal and, if so, why.
+> ```cpp
+> int i = 0;
+> ```
+> (a) double* dp = &i;
+> (b) int *ip = i;
+> (c) int *p = &i;
+
+- `(a)` illegal, a `double` pointer cannot be assigned with an `int` object
+- `(b)` illegal, an `int` 0 cannot assign to any pointer
+- `(c)` legal
+
+<br></br>
+
+## Exer 2.22
+
+> Assuming p is a pointer to int, explain the following code:
+> if (p) // ...
+> if (*p) // ...
+
+- if pointer `p` is ~~not a empty pointer~~ **valid**
+- if the object `p` pointed to is not zero
+
+<br></br>
+
+## Exer 2.23
+
+> Given a pointer p, can you determine whether p points to a valid object? If so, how? If not, why not?
+
+- sure, `if (p)` can do so.
+
+<br></br>
+
+## Exer 2.24
+
+> Why is the initialization of p legal but that of lp illegal?
+
+- ~~type is not match~~ p is `void *` which accepts all type; while lp is `long *` that cannot accept `int`
+
+<br></br>
+
+## Exer 2.25
+
+> Determine the types and values of each of the following variables.
+> (a) int* ip, i, &r = ip;
+> (b) int i, *ip = 0;
+> (c) int* ip, ip2;
+
+- pointer, `int` object, reference
+- `int` object, pointer
+- pointer, `int` object
+
+<br></br>
+
+## Exer 2.26
+
+> Which of the following are legal? For those that are illegal, explain why.
+> (a) const int buf;
+> (b) int cnt = 0;
+> (c) const int sz = cnt;
+> (d) ++cnt; ++sz;
+
+- `(a)` illegal, `const int` must be initialized
+- `(b)` legal
+- `(c)` legal
+- `(d)` illegal, `sz` is not allowed to amend
+
+
 
