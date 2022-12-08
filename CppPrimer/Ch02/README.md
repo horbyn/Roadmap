@@ -345,5 +345,104 @@
 - `(c)` legal
 - `(d)` illegal, `sz` is not allowed to amend
 
+<br></br>
 
+## Exer 2.27
 
+> Which of the following initializations are legal? Explain why.
+> (a) int i = -1, &r = 0;
+> (b) int *const p2 = &i2;
+> (c) const int i = -1, &r = 0;
+> (d) const int *const p3 = &i2;
+> (e) const int *p1 = &i2;
+> (f) const int &const r2;
+> (g) const int i2 = i, &r = i;
+
+- `(a)` illegal, `r` is a non-const variable that cannot be initialized with literal
+- `(b)` legal, `p2` is const pointer that can be initialized with const
+- `(c)` legal, `r` is a reference to const that can be initialized with literal
+- `(d)` legal, `p3` is a const pointer to const that can be initialized with const
+- `(e)` legal, `p1` is a reference to const that can be initialized with const
+- `(f)` illegal, `r2` is a const that must be initialized
+- `(g)` legal, `r` is a reference to const that can be initialized with non-const
+
+<br></br>
+
+## Exer 2.28
+
+> Explain the following definitions. Identify any that are illegal.
+> (a) int i, *const cp;
+> (b) int *p1, *const p2;
+> (c) const int ic, &r = ic;
+> (d) const int *const p3;
+> (e) const int *p;
+
+- `(a)` illegal, `cp` is a const pointer, so it must be initialized
+- `(b)` illegal, `p2` is a const pointer that must be initialized
+- `(c)` ~~legal~~ **illegal, `ic` is const that must be initialized**
+- `(d)` illegal, `p3` is a const pointer to const that must be initialized
+- `(e)` legal, `p` is a reference to const
+
+<br></br>
+
+## Exer 2.29
+
+> Uing the variables in the previous exercise, which of the following assignments are legal? Explain why.
+> (a) i = ic;
+> (b) p1 = p3;
+> (c) p1 = &ic;
+> (d) p3 = &ic;
+> (e) p2 = p1;
+> (f) ic = *p3;
+
+- `(a)` legal, const can be assigned to non-const
+- `(b)` ~~legal, const can be assigned to non-const~~ **illegal, non-const pointer is not allow to point to const**
+- `(c)` illegal, non-const pointer cannot point to const
+- `(d)` illegal, `p3` is const that cannot be reassigned
+- `(e)` illegal, `p2` is const too
+- `(f)` illegal, `ic` is const too
+
+<br></br>
+
+## Exer 2.30
+
+> For each of the following declarations indicate whether the object being declared has top-level or low-level const.
+> ```cpp
+> const int v2 = 0; int v1 = v2;
+> int *p1 = &v1, &r1 = v1;
+> const int *p2 = &v2, *const p3 = &i, &r2 = v2;
+> ```
+
+- `v2`: top-level const
+- `v1`/`p1`/`r1`: neither nor
+- `p2`: low-level const
+- `p3`: ~~low-level const~~ **top-level const**
+- `r2`: low-level const
+
+<br></br>
+
+## Exer 2.31
+
+> Given the declarations in the previous exercise determine whether the following assignments are legal. Explain how the top-level or low-level const applies in each case.
+> ```cpp
+> r1 = v2;
+> p1 = p2; p2 = p1;
+> p1 = p3; p2 = p3;
+> ```
+
+- `r1 = v2`: the left is `int &` while the right is `const int`, ~~illegal, low-level const cannot be assigned to non-const~~ **legal, the right is top-level const that can be assigned**
+- `p1 = p2`: the left is `int *` and the right is `const int *`, illegal, low-level const cannot be assigned to non-const
+- `p2 = p1`: the left is `const int *` and the right is `int *`, legal
+- `p1 = p3`: the left is `int *` and the right is `const int *const`, illegal, low-level const cannot be assigned to non-const
+- `p2 = p3`: the left is `const int *` and the right is `const int *const`, legal
+
+<br></br>
+
+## Exer 2.32
+
+> Is the following code legal or not? If not, how might you make it legal?
+> ```cpp
+> int null = 0, *p = null;
+> ```
+
+- ~~legal~~ **illegal, `null` is a variable, `p` is a pointer, this should modify to `p = &null`**
