@@ -446,3 +446,95 @@
 > ```
 
 - ~~legal~~ **illegal, `null` is a variable, `p` is a pointer, this should modify to `p = &null`**
+
+<br></br>
+
+## Exer 2.33
+
+> Using the variable definitions from this section, determine what happens in each of these assignments:
+> a = 42; b = 42; c = 42;
+> d = 42; e = 42; g = 42;
+
+- `a` is `int`, legal
+- `b` is `int`, legal
+- `c` is `int`, legal
+- `d` is `int *`, illegal **, becanse d cannot be assigned with a literal**
+- `e` is `const int *`, illegal**, becanse d cannot be assigned with a literal**
+- `g` is `const int &`, ~~legal~~ **illegal, g binds to const which cannot be reassigned**
+
+<br></br>
+
+## Exer 2.34
+
+> Write a program containing the variables and assignments from the previous exercise. Print the variables before and after the assignments to check whether your predictions in the previous exercise were correct. If not, study the examples until you can convince yourself you know what led you to the wrong conclusion.
+
+- SKIP
+
+<br></br>
+
+## Exer 2.35
+
+> Determine the types deduced in each of the following definitions. Once you’ve figured out the types, write a program to see whether you were correct.
+> ```cpp
+> const int i = 42;
+> auto j = i; const auto &k = i; auto *p = &i;
+> const auto j2 = i, &k2 = i;
+> ```
+
+**NOTE: I suspect the answer is wrong**
+
+- `j`: int
+- `k`: const int
+- `p`: const int *
+- `j2`: const int
+- `k2`: const int
+
+<br></br>
+
+## Exer 2.36
+
+> In the following code, determine the type of each variable and the value each variable has when the code finishes:
+> ```cpp
+> int a = 3, b = 4;
+> decltype(a) c = a;
+> decltype((b)) d = a;
+> ++c;
+> ++d;
+> ```
+
+- `a` is `int` that is 4
+- `b` is `int` that is 4
+- `c` is `int` that is 4
+- `d` is `int &` that is 4 
+
+<br></br>
+
+## Exer 2.37
+
+> Assignment is an example of an expression that yields a reference type. The type is a reference to the type of the left-hand operand. That is, if i is an int, then the type of the expression i = x is int&. Using that knowledge, determine the type and value of each variable in this code:
+> ```cpp
+> int a = 3, b = 4;
+> decltype(a) c = a;
+> decltype(a = b) d = a;
+> ```
+
+- `a` is `int` that is 3
+- `b` is `int` that is 4
+- `c` is `int` that is 3
+- `d` is `int &` that is 3 
+
+<br></br>
+
+## Exer 2.38
+
+> 2.38: Describe the differences in type deduction between decltype and auto. Give an example of an expression where auto and decltype will deduce the same type and an example where they will deduce differing types.
+
+- Background:
+    + `int i = 10;`
+- Same(both are `int`):
+    + `auto aa = i;`
+    + `decltype(i) da;`
+- Difference(`auto` is `int` while `decltype()` is `int &`)
+    + `auto ab = (i);`
+    + `decltype((i)) db;`
+
