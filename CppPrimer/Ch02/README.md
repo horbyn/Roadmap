@@ -538,3 +538,43 @@
     + `auto ab = (i);`
     + `decltype((i)) db;`
 
+<br></br>
+
+## Exer 2.39
+
+> Compile the following program to see what happens when you forget the semicolon after a class definition. Remember the message for future reference.
+> ```cpp
+> struct Foo { /* empty */ } // Note: no semicolon
+> int main()
+> {
+>  return 0;
+> }
+> ```
+
+- SKIP
+
+<br></br>
+
+## Exer 2.40
+
+> Write your own version of the Sales_data class.
+
+- SKIP
+
+<br></br>
+
+## Exer 2.41
+
+> Use your Sales_data class to rewrite the exercises in §1.5.1 (p. 22), § 1.5.2 (p. 24), and § 1.6 (p. 25). For now, you should define your Sales_data class in the same file as your main function.
+
+- SKIP
+
+<br></br>
+
+## Exer 2.42
+
+> Write your own version of the Sales_data.h header and use it to rewrite the exercise from § 2.6.2 (p. 76).
+
+- SKIP
+
+<br></br>
