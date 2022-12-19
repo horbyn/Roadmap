@@ -1,22 +1,24 @@
 #include <iostream>
 #include <string>
-using namespace std;
 
 int main() {
     std::string word, large_word;
 
     std::cout << "Please input some words:" << std::endl;
-    while (cin >> word)
+    while (std::cin >> word) {
         large_word += word;
-    ::getchar();
+        if (std::cin.get() == '\n')    break;
+    }
 
     std::cout << "The whole setence previously is: " << large_word << std::endl;
 
     std::cout << "\n=================================\n\n";
     std::cout << "Now please input some words again:" << std::endl;
-    word.clear();
-    while (std::cin >> word)
-        std::cout << word << " ";
+    large_word.clear();
+    while (std::cin >> word) {
+        large_word += word + " ";
+        if (std::cin.get() == '\n')    break;
+    }
     std::cout << "The whole setence previously devided by space is: " << large_word << std::endl;
 
     return 0;
