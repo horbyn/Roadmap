@@ -98,3 +98,37 @@
 - ~~illegal, `c` is `int &`~~ **Legal, and `c` is `const int &`, but the code segment cannot be compiled because references to const is unchanging**
 
 <br></br>
+
+## Exer 3.12
+
+> Which, if any, of the following vector definitions are in error? For those that are legal, explain what the definition does. For those that are not legal, explain why they are illegal.
+> (a) vector\<vector\<int\>\> ivec;
+> (b) vector\<string\> svec = ivec;
+> (c) vector\<string\> svec(10, "null");
+
+- (a): legal, `ivec` is a `std::vector` object whose elements are `std::vector<int>` object
+- (b): illegal, assignment cannot happened between two different types
+- (c): legal, `svec` is a `std::vector<std::string >` object which have 10 object included "null" value
+
+<br></br>
+
+## Exer 3.13
+
+> How many elements are there in each of the following vectors? What are the values of the elements?
+> (a) vector<int> v1;
+> (b) vector<int> v2(10);
+> (c) vector<int> v3(10, 42);
+> (d) vector<int> v4{10};
+> (e) vector<int> v5{10, 42};
+> (f) vector<string> v6{10};
+> (g) vector<string> v7{10, "hi"};
+
+- (a) None
+- (b) Ten, all are 0
+- (c) Ten, all are 42
+- (d) only one object held 10
+- (e) Two, 10 and 42 it held
+- (f) Ten, all are null
+- (g) Ten, all are "hi"
+
+<br></br>
