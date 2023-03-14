@@ -132,3 +132,69 @@
 - (g) Ten, all are "hi"
 
 <br></br>
+
+## Exer 3.14
+
+> 3.14: Write a program to read a sequence of ints from cin and store those values in a vector.
+
+[run exer3-14.sh](exer3-14.sh)
+
+<br></br>
+
+## Exer 3.15
+
+> Repeat the previous program but read strings this time.
+
+[run exer3-15.sh](exer3-15.sh)
+
+<br></br>
+
+## Exer 3.16
+
+> Write a program to print the size and contents of the vectors from exercise 3.13. Check whether your answers to that exercise were correct. If not, restudy § 3.3.1 (p. 97) until you understand why you were wrong
+
+**SKIP**
+
+<br></br>
+
+## Exer 3.17
+
+> Read a sequence of words from cin and store the values a vector. After you’ve read all the words, process the vector and change each word to uppercase. Print the transformed elements, eight words to a line
+
+[run exer3-17.sh](exer3-17.sh)
+
+<br></br>
+
+## Exer 3.18
+
+> Is the following program legal? If not, how might you fix it?
+> ```cpp
+> vector<int> ivec;
+> ivec[0] = 42;
+> ```
+
+- No, changes to `ivec.push_back(0);`
+
+<br></br>
+
+## Exer 3.19
+
+> List three ways to define a vector and give it ten elements, each with the value 42. Indicate whether there is a preferred way to do so and why.
+
+- `std::vector<int > v1(10, 42);`
+- `std::vector<int > v2{ 42, 42, 42, 42, 42, 42, 42, 42, 42, 42 };`
+- ```cpp
+    std::vector<int > v3;
+    for(size_t i = 0; i < 10; ++i)
+        v3.push_back(42);
+  ```
+
+i like the first one because of convenience
+
+<br></br>
+
+## Exer 3.20
+
+> Read a set of integers into a vector. Print the sum of each pair of adjacent elements. Change your program so that it prints the sum of the first and last elements, followed by the sum of the second and second-to-last, and so on.
+
+[run exer3-20.sh](exer3-20.sh)
