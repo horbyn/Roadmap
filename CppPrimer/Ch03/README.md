@@ -243,6 +243,89 @@ i like the first one because of convenience
 
 ## Exer 3.26
 
->  In the binary search program on page 112, why did we write `mid = beg + (end - beg) / 2`; instead of `mid = (beg + end) / 2` ?;
+> In the binary search program on page 112, why did we write `mid = beg + (end - beg) / 2`; instead of `mid = (beg + end) / 2` ?;
 
 - **because of considering of overflowing** because there is NO plus operator overrided
+
+<br></br>
+
+## Exer 3.27
+
+> Assuming txt_size is a function that takes no arguments and returns an int value, which of the following definitions are illegal? Explain why.
+> `unsigned buf_size = 1024;`
+> (a) `int ia[buf_size];`
+> (b) `int ia[4 * 7 - 14];`
+> (c) `int ia[txt_size()];`
+> (d) `char st[11] = "fundamental"`
+
+- (a) illegal, because `buf_size` is a variable
+- (c) illegal too, the reason likes above
+- **(d) illegal, becasue no capacity could wrap null terminator**
+
+<br></br>
+
+## Exer 3.28
+
+> What are the values in the following arrays?
+> ```cpp
+> string sa[10];
+> int ia[10];
+> int main() {
+>     string sa2[10]; int ia2[10];
+> }
+> ```
+
+- `sa` is all 10 elements are null string
+- `ia` is all 10 elements are 0
+- `sa2` is all 10 elements are undefined
+- `ia2` is all 10 elements are undefined
+
+<br></br>
+
+## Exer 3.29
+
+> List some of the drawbacks of using an array instead of a vector
+
+- With fixed length, array is unfiexible
+
+<br></br>
+
+## Exer 3.30
+
+> Identify the indexing errors in the following code:
+> ```cpp
+> constexpr size_t array_size = 10;
+> int ia[array_size];
+> for (size_t ix = 1; ix <= array_size; ++ix)
+>     ia[ix] = ix;
+> ```
+
+- 10
+
+<br></br>
+
+## Exer 3.31
+
+> Write a program to define an array of ten ints. Give each element the same value as its position in the array
+
+[run exer3-31.sh](exer3-31.sh)
+
+<br></br>
+
+## Exer 3.32
+
+> Copy the array you defined in the previous exercise into another array. Rewrite your program to use vectors.
+
+[run exer3-32.sh](exer3-32.sh)
+
+<br></br>
+
+## Exer 3.33
+
+> What would happen if we did not initialize the scores array in the program on page 116?
+
+- some score range which is actually no input maybe a nonzero value
+
+<br></br>
+
+
