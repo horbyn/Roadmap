@@ -245,7 +245,7 @@ i like the first one because of convenience
 
 > In the binary search program on page 112, why did we write `mid = beg + (end - beg) / 2`; instead of `mid = (beg + end) / 2` ?;
 
-- **because of considering of overflowing** because there is NO plus operator overrided
+- ~~because of considering of overflowing~~ **because there is NO plus operator overrided**
 
 <br></br>
 
@@ -260,7 +260,7 @@ i like the first one because of convenience
 
 - (a) illegal, because `buf_size` is a variable
 - (c) illegal too, the reason likes above
-- **(d) illegal, becasue no capacity could wrap null terminator**
+- ~~(d) illegal, becasue no capacity could wrap null terminator~~
 
 <br></br>
 
@@ -328,4 +328,29 @@ i like the first one because of convenience
 
 <br></br>
 
+## Exer 3.34
+
+> Given that p1 and p2 point to elements in the same array, what does the following code do? Are there values of p1 or p2 that make this code illegal?
+> `p1 += p2 - p1;`
+
+- `p1` is equivalent of `p2`
+- ~~no~~ **if `p1` and `p2` are belong with different array that the statement is illegal**
+
+<br></br>
+
+## Exer 3.35
+
+> Using pointers, write a program to set the elements in an array to zero.
+
+[run exer3-35.sh](exer3-35.sh)
+
+<br></br>
+
+## Exer 3.36
+
+> Write a program to compare two arrays for equality. Write a similar program to compare two vectors.
+
+[run exer3-36.sh](exer3-36.sh)
+
+<br></br>
 
