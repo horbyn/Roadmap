@@ -354,3 +354,30 @@ i like the first one because of convenience
 
 <br></br>
 
+## Exer 3.37
+
+> What does the following program do?
+> ```cpp
+> const char ca[] = {'h', 'e', 'l', 'l', 'o'};
+> const char *cp = ca;
+> while (*cp) {
+>     cout << *cp << endl; ++cp;
+> }
+> ```
+
+- it calculates the string length logically, but it wouldn't get the correct result because the array misses the null character in the end
+
+<br></br>
+
+## Exer 3.38
+
+> In this section, we noted that it was not only illegal but meaningless to try to add two pointers. Why would adding two pointers be meaningless?
+
+- it maybe point to the place that is undefined
+
+<br></br>
+
+## Exer 3.39
+
+> 
+
