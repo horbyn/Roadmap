@@ -379,5 +379,15 @@ i like the first one because of convenience
 
 ## Exer 3.39
 
-> 
+> Write a program to compare two strings. Now write a program to compare the values of two C-style character strings.
+
+[run exer3-39.sh](exer3-39.sh)
+
+<br></br>
+
+## Exer 3.40
+
+> Write a program to define two character arrays initialized from string literals. Now define a third character array to hold the concatenation of the two arrays. Use strcpy and strcat to copy the two arrays into the third.
+
+[run exer3-40.sh](exer3-40.sh)
 
