@@ -391,3 +391,44 @@ i like the first one because of convenience
 
 [run exer3-40.sh](exer3-40.sh)
 
+<br></br>
+
+## Exer 3.41
+
+> Write a program to initialize a `vector` from an array of `int`s
+
+[run exer3-41.sh](exer3-41.sh)
+
+<br></br>
+
+## Exer 3.42
+
+> Write a program to copy a `vector` of `int`s into an array of `int`s
+
+[run exer3-42.sh](exer3-42.sh)
+
+<br></br>
+
+## Exer 3.43
+
+> Write three different versions of a program to print the elements of ia. One version should use a range for to manage the iteration, the other two should use an ordinary for loop in one case using subscripts and in the other using pointers. In all three programs write all the types directly. That is, do not use a type alias, auto, or decltype to simplify the code.
+
+[run exer3-43.sh](exer3-43.sh)
+
+<br></br>
+
+## Exer 3.44
+
+> Rewrite the programs from the previous exercises using a type alias for the type of the loop control variables.
+
+[run exer3-44.sh](exer3-44.sh)
+
+<br></br>
+
+## Exer 3.45
+
+> Rewrite the programs again, this time using `auto`.
+
+[run exer3-45.sh](exer3-45.sh)
+
+<br></br>
