@@ -86,4 +86,47 @@
 
 <br></br>
 
+## 4.8
 
+> Explain when operands are evaluated in the logical AND, logical OR, and equality operators.
+
+- ~~logical AND first, then is logical OR, and equality operators is the last~~ **logic AND/OR are evaluated the left operands first, then the right if the former result is unknown; the equality operators have no order**
+
+<br></br>
+
+## 4.9
+
+> Explain the behavior of the condition in the following if:
+> ```cpp
+> const char *cp = "Hello World";
+> if (cp && *cp)
+> ```
+
+- ~~check if `cp` is `nullptr` then the value `cp` pointed to~~ **check if `cp` is `nullptr` then if the value `cp` pointed to is null terminated**
+
+<br></br>
+
+## 4.10
+
+> Write the condition for a while loop that would read ints from the standard input and stop when the value read is equal to 42.
+
+[run exer4-10.sh](exer4-10.sh)
+
+<br></br>
+
+## 4.11
+
+> Write an expression that tests four values, `a`, `b`, `c`, and `d`, and ensures that a is greater than `b`, which is greater than `c`, which is greater than `d`
+
+[run exer4-11.sh](exer4-11.sh)
+
+<br></br>
+
+## 4.12
+
+>  Assuming `i`, `j`, and `k` are all ints, explain what `i != j < k` means.
+
+- that execuates `j < k` fisrt and return the `bool` value `temp`
+- then check `i != temp` which make `temp` to become the `int` value `1` or `0`; so check `i != 1` or `i != 0` finally
+
+<br></br>
