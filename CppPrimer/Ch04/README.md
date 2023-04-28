@@ -130,3 +130,76 @@
 - then check `i != temp` which make `temp` to become the `int` value `1` or `0`; so check `i != 1` or `i != 0` finally
 
 <br></br>
+
+## 4.13
+
+> What are the values of i and d after each assignment?
+> ```cpp
+> int i; double d;
+> (a) d = i = 3.5;
+> (b) i = d = 3.5;
+> ```
+
+- (a): `i` is 3 and `d` is 3.0
+- (b): `d` is 3.5 and `i` is 3
+
+<br></br>
+
+## 4.14
+
+> Explain what happens in each of the if tests:
+> `if (42 = i) // ...`
+> `if (i = 42) // ...`
+
+- compilation error
+- true forever
+
+<br></br>
+
+## 4.15
+
+> The following assignment is illegal. Why? How would you correct it?
+> ```cpp
+> double dval; int ival; int *pi;
+> dval = ival = pi = 0;
+> ```
+
+- `pi = 0`: it's illegal that a `int` value assigns to pointer
+- `ival = pi`: a pointer assigns to `int` illegally too
+- CORRENT:
+    + `dval = ival = 0`
+    + `pi = nullptr`
+
+<br></br>
+
+## 4.16
+
+> Although the following are legal, they probably do not behave as the programmer expects. Why? Rewrite the expressions as you think they should be.
+> ```cpp
+> (a) if (p = getPtr() != 0)
+> (b) if (i = 1024)
+> ```
+
+- `p` will be reassigned
+    + CORRENT: `if (p = getPtr() != 0)`
+- true forever
+    + CORRENT: `if (i == 1024)`
+
+<br></br>
+
+## 4.17
+
+> Explain the difference between prefix and postfix increment.
+
+- prefix increment changes the operands first, then uses the changed objects to be the result
+- postfix increment uses the object duplication to be the result to return, then changes the original objects
+
+<br></br>
+
+## 4.18
+
+> What would happen if the while loop on page 148 that prints the elements from a vector used the prefix increment operator?
+
+- That will skip the first element and print the first negative element
+
+
