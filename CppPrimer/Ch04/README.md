@@ -202,4 +202,254 @@
 
 - That will skip the first element and print the first negative element
 
+<br></br>
 
+## 4.19
+
+> Given that `ptr` points to an `int`, that `vec` is a `vector<int>`, and that `ival` is an `int`, explain the behavior of each of these expressions. Which, if any, are likely to be incorrect? Why? How might each be corrected?
+> (a) `ptr != 0 && *ptr++`
+> (b) `ival++ && ival`
+> (c) `vec[ival++] <= vec[ival]`
+
+- a. ~~dereference the `ptr` if not null, then its value plus one~~ **Check whether `ptr` is not null first. If true check whether the value pointed to is not zero secondly. The last, if both true, move `ptr` backward that maybe is not valid if `ptr` is a individual integer**
+- b. check whether `ival` is not equal of zero, then plus one, and then checks whether not zero again
+- c. check if `vec[ival]` is not great of `vec[ival + 1]`
+
+<br></br>
+
+## 4.20
+
+> Assuming that `iter` is a `vector<string>::iterator`, indicate which, if any, of the following expressions are legal. Explain the behavior of the legal expressions and why those that aren’t legal are in error.
+> (a) `*iter++;`
+> (b) `(*iter)++;`
+> (c) `*iter.empty()`
+> (d) `iter->empty();`
+> (e) `++*iter;`
+> (f) `iter++->empty();`
+
+- a. legal, it dereferences `iter` which gains a character and ~~plus its value~~ **moves the iterator `iter` to next**
+- b. ~~legal, like (a)~~ **illegal, the `std::string` object the iterator dereferenced has no member of post-plus operator**
+- c. ~~illegal, the character the iterator dereferenced has no member of `empty()`~~ **illegal, `iter` combines with `empty()` because the privilege of dot is higher than the dereference, in result a complitation error that iterator object has no member of `empty()`**
+- d. legal, it checks the current iterator `iter` is that a empty string
+- e. ~~legal, like (a)~~ **illegal, like (b)**
+- f. maybe not legal, it does such a thing that check `iter` is that empty first, then make `iter` points to the next. But it is illegal if `iter` is the last iterator which cannot move backward
+
+<br></br>
+
+## 4.21
+
+> Write a program to use a conditional operator to find the elements in a `vector<int>` that have odd value and double the value of each such element.
+
+[run exer4-21.sh](exer4-21.sh)
+
+<br></br>
+
+## 4.22
+
+> Extend the program that assigned high pass, pass, and fail grades to also assign low pass for grades between 60 and 75 inclusive. Write two versions: One version that uses only conditional operators; the other should use one or more if statements. Which version do you think is easier to understand and why?
+
+[run exer4-22.sh](exer4-22.sh)
+
+<br></br>
+
+## 4.23
+
+> The following expression fails to compile due to operator precedence. Using Table 4.12 (p. 166), explain why it fails. How would you fix it?
+> ```cpp
+> string s = "word";
+> string pl = s + s[s.size() - 1] == 's' ? "" : "s" ;
+> ```
+
+- **the string object combines with another string object first, then the new one compares with the character 's' which is illegal. Fix it as following**
+  ```cpp
+  string s = "word";
+  string pl = s + (s[s.size() - 1] == 's' ? "" : "s");
+  ```
+
+<br></br>
+
+## 4.24
+
+> Our program that distinguished between high pass, pass, and fail depended on the fact that the conditional operator is right associative. Describe how that operator would be evaluated if the operator were left associative.
+
+- **the code `std::string finalgrade = (grade < 60) ? "fail" : (60 <= grade && grade <= 75) ? "low pass" : "pass";` is equal of the next one if it is left associative**
+- **`std::string finalgrade = ((grade < 60) ? "fail" : (60 <= grade && grade <= 75)) ? "low pass" : "pass";`**
+
+<br></br>
+
+## 4.25
+
+> What is the value of `~'q' << 6` on a machine with 32-bit `int`s and 8 bit `char`s, that uses Latin-1 character set in which 'q' has the bit pattern `01110001`?
+
+- first the not operation is `1000_1110`
+- then the extension of the 8 bit is `1111_1111 1111_1111 1111_1111 1000_1110`
+- the last is left-shift operation, which is `1111_1111 1111_1111 1110_0011 1000_0000`
+- **translation to 2's complement forgotten: `1000_0000 0000_0000 0001_1100 1000_0000`**
+
+<br></br>
+
+## 4.26
+
+> In our grading example in this section, what would happen if we used `unsigned int` as the type for `quiz1`?
+
+- ~~it is ok~~ **it is wrong in some machine used 16-bit to define `int`**
+
+<br></br>
+
+## 4.27
+
+> What is the result of each of these expressions?
+> `unsigned long ul1 = 3, ul2 = 7;`
+> (a) `ul1 & ul2`
+> (b) `ul1 | ul2`
+> (c) `ul1 && ul2`
+> (d) `ul1 || ul2`
+
+- a. 3
+- b. 7
+- c. true
+- d. true
+
+<br></br>
+
+## 4.28
+
+> Write a program to print the size of each of the built-in types.
+
+[run exer4-28.sh](exer4-28.sh)
+
+<br></br>
+
+## 4.29
+
+> Predict the output of the following code and explain your reasoning. Now run the program. Is the output what you expected? If not, figure out why.
+>
+> ```cpp
+> int x[10];
+> int *p = x;
+> cout << sizeof(x)/sizeof(*x) << endl;
+> cout << sizeof(p)/sizeof(*p) << endl;
+> ```
+
+- `sizeof(x)/sizeof(*x)` is ten
+- `sizeof(p)/sizeof(*p)` is two
+
+<br></br>
+
+## 4.30
+
+> Using Table 4.12 (p. 166), parenthesize the following expressions to match the default evaluation:
+> (a) `sizeof x + y`
+> (b) `sizeof p->mem[i]`
+> (c) `sizeof a < b`
+> (d) `sizeof f()`
+
+- ~~`sizeof (x) + y`~~ **`sizeof (x + y)`**
+- `sizeof (p->mem[i])`
+- ~~`sizeof (a) < b`~~ **`sizeof (a < b)`**
+- `sizeof (f())`
+
+<br></br>
+
+## 4.31
+
+> The program in this section used the prefix increment and decrement operators. Explain why we used prefix and not postfix. What changes would have to be made to use the postfix versions? Rewrite the program using postfix operators
+
+- no changes
+
+<br></br>
+
+## 4.32
+
+> Explain the following loop.
+> ```cpp
+> constexpr int size = 5;
+> int ia[size] = {1,2,3,4,5};
+> for (int *ptr = ia, ix = 0;
+>     ix != size && ptr != ia+size;
+>     ++ix, ++ptr) { /* ... */ }
+> ```
+
+- travesal each element of the array
+
+<br></br>
+
+## 4.33
+
+> Using Table 4.12 (p. 166) explain what the following expression does:
+> `someValue ? ++x, ++y : --x, --y`
+
+- ~~syntax error: `?:` is given priority over `,`, so `someValue ? ++x` first, then the `,` operator encounters syntax error~~ **equal of `(someValue ? ++x, ++y : --x), --y`**
+
+<br></br>
+
+## 4.34
+
+> Given the variable definitions in this section, explain what conversions take place in the following expressions:
+> (a) `if (fval)`
+> (b) `dval = fval + ival;`
+> (c) `dval + ival * cval;`
+> Remember that you may need to consider the associativity of the operators.
+
+- a. `float` to `bool`
+- b. all to `double`
+- c. `char` converts to `int` in multiplication first, then `int` to `double`
+
+<br></br>
+
+## 4.35
+
+> Given the following definitions,
+> ```cpp
+> char cval; int ival; unsigned int ui;
+> float fval; double dval;
+> ```
+> identify the implicit type conversions, if any, taking place:
+> (a) cval = 'a' + 3;
+> (b) fval = ui - ival * 1.0;
+> (c) dval = ui * fval;
+> (d) cval = ival + fval + dval;
+
+- a. `char a` converts to `int` and plus 3, then `int` converts to char again
+- b. `int ival` converts to `double` to complete the multiplication, then `unsigned int ui` to `double` too, they do subtraction and truncate down to `float`
+- c. `unsigned int ui` converts to `float` first, then the result of multiplication converts to `double`
+- d. right side of assignment converts to `double`, then the result to `char`
+
+<br></br>
+
+## 4.36
+
+> Assuming `i` is an `int` and `d` is a `double` write the expression `i *= d` so that it does integral, rather than floating-point multiplication.
+
+```cpp
+int i = 1;
+double d = 2.1;
+int iresult = i * reinterpret_cast<int>(d);
+```
+
+<br></br>
+
+## 4.37
+
+> Rewrite each of the following old-style casts to use a named cast:
+> `int i; double d; const string *ps; char *pc; void *pv;`
+> (a) `pv = (void *)ps;`
+> (b) `i = int(*pc);`
+> (c) `pv = &d;`
+> (d) `pc = (char *) pv;`
+
+- ~~`pv = const_cast<void * >(ps)`~~ **pv = static_cast<void * >(const_cast<string *>(ps))**
+- `i = static_cast<int >(*pc)` or `i = reinterpret_cast<int >(*pc)`
+- `pv = static_cast<void * >(&d)` or `pv = reinterpret_cast<void * >(&d)`
+- `pc = static_cast<char * >(pv)` or `pc = reinterpret_cast<char * >(pv)`
+
+<br></br>
+
+## 4.38
+
+> Explain the following expression:
+> `double slope = static_cast<double>(j/i);`
+
+- the division type converts to `double`
+
+<br></br>
