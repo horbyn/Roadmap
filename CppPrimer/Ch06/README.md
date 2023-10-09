@@ -300,4 +300,157 @@ get_sum(initializer_list<int > ls) {
 
 ## 6.30
 
->
+> Compile the version of str_subrange as presented on page 223 to see what your compiler does with the indicated errors.
+
+- `error: return-statement with no value, in function returning ‘bool’ [-fpermissive]`
+
+<br></br>
+
+## 6.31
+
+> When is it valid to return a reference? A reference to `const`?
+
+- returning a reference of local variable is invalid; **returning a reference to `const` when we do not want it be revised**
+
+<br></br>
+
+## 6.32
+
+> Indicate whether the following function is legal. If so, explain what it does; if not, correct any errors and then explain it.
+> ```cpp
+> int &get(int *arry, int index) { return arry[index]; }
+> int main() {
+>     int ia[10];
+>     for (int i = 0; i != 10; ++i)
+>         get(ia, i) = i;
+> }
+> ```
+
+- legal, it assigns each element of the array
+
+<br></br>
+
+## 6.33
+
+> Write a recursive function to print the contents of a `vector`.
+
+```cpp
+// `idx` begins with 0
+void
+print_vector_recursive(const std::vector<int > &v, int idx) {
+    if (idx >= v.size())    return;
+
+    std::cout << v[idx] << " ";
+    print_vector_recursive(v, idx + 1);
+}
+```
+
+<br></br>
+
+## 6.34
+
+> What would happen if the stopping condition in `factorial` were `if (val != 0)`
+
+- ~~it's ok~~ **will cause bug if the parameter passed is negative**
+
+<br></br>
+
+## 6.35
+
+> In the call to `fact`, why did we pass `val - 1` rather than `val--`?
+
+- `val--` will use the previous value first then change
+
+<br></br>
+
+## 6.36
+
+> Write the declaration for a function that returns a reference to
+an array of ten `string`s, `decltype`, or a type alias.
+
+`std::string (&(f(void)))[10];`
+
+<br></br>
+
+## 6.37
+
+> Write three additional declarations for the function in the previous exercise. One should use a type alias, one should use a trailing return, and the third should use `decltype`. Which form do you prefer and why?
+
+- type alias
+    ```cpp
+    using arrT = std::string (&)[10];
+    arrT func(void);
+    ```
+- trailing return
+    `auto func(void) -> std::string (&)[10];`
+- ~~`decltype()`~~
+    ```cpp
+    std::string arrs[10] = { ... };
+    std::string (&arr_rs)[10] = arrs;
+    decltype(arr_rs) func(void);
+    ```
+
+- **`decltype()`**
+    ```cpp
+    std::string arrs[10] = { ... };
+    decltype(arrs) &func();
+    ```
+
+<br></br>
+
+## 6.38
+
+> Revise the `arrPtr` function on to return a reference to the array.
+
+- `decltype(odd) &arrPtr(int i);`
+
+<br></br>
+
+## 6.39
+
+> Explain the effect of the second declaration in each one of the following sets of declarations. Indicate which, if any, are illegal.
+> ```cpp
+> (a) int calc(int, int);
+>     int calc(const int, const int);
+> (b) int get();
+>     double get();
+> (c) int *reset(int *); 
+>     double *reset(double *);
+> ```
+
+- (a) receive two `const int` parameters and return `int` object. it is illegal because `int` could convert to `const int` which compiler ignored the top-level const
+- (b) return `double` object. it is illegal too because it cannot overload by only different return type
+- (c) receive `double` pointer and return `double` pointer. it is legal.
+
+<br></br>
+
+## 6.40
+
+> Which, if either, of the following declarations are errors? Why?
+> (a) `int ff(int a, int b = 0, int c = 0);`
+> (b) `char *init(int ht = 24, int wd, char bckgrnd);`
+
+- (b): ONLY the latter parameter could hold the defaults
+
+<br></br>
+
+## 6.41
+
+> Which, if any, of the following calls are illegal? Why? Which, if any, are legal but unlikely to match the programmer’s intent? Why?
+> `char *init(int ht, int wd = 80, char bckgrnd = ' ');`
+> (a) `init();`
+> (b) `init(24,10);`
+> (c) `init(14, '*');`
+
+- ~~none is illegal~~ **the first is illegal because parameter amount is not match**, but (c) maybe not match the intent that (c) passed a character likely to used to initialize the last parameter but not
+
+<br></br>
+
+## 6.42
+
+> Give the second parameter of `make_plural` (§ 6.3.2, p. 224) a default argument of `'s'`. Test your program by printing singular and plural versions of the words `success` and `failure`.
+
+- ~~the second?~~ **`std::string make_plural(size_t ctr, const std::string &word, const std::string &ending = "s")`**
+
+<br></br>
+
