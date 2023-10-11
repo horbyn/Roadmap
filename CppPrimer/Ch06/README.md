@@ -454,3 +454,162 @@ an array of ten `string`s, `decltype`, or a type alias.
 
 <br></br>
 
+## 6.43
+
+> Which one of the following declarations and definitions would you put in a header? In a source file? Explain why.
+> (a) `inline bool eq(const BigInt&, const BigInt&) {...}`
+> (b) `void putValues(int *arr, int size);`
+
+- (a) ~~put in a source file because it is a definition~~ **put in a header because it is a inline function**
+- (b) put in a header because it is a declaration
+
+<br></br>
+
+## 6.44
+
+> Rewrite the `isShorter` function from § 6.2.2 (p. 211) to be `inline`.
+
+```cpp
+inline bool
+isShorter(const std::string &s1, const std::string &s2) {
+    return s1.size() < s2.size();
+}
+```
+
+<br></br>
+
+## 6.45
+
+> Review the programs you’ve written for the earlier exercises and decide whether they should be defined as `inline`. If so, do so. If not, explain why they should not be `inline`.
+
+- the previous one should do, because the program is short with simple feature
+
+<br></br>
+
+## 6.46
+
+> Would it be possible to define `isShorter` as a `constexpr`? If so, do so. If not, explain why not.
+
+- no, because `s1` and `s2` ~~is variable not const~~ **cannot be merged with a `const` expression with `operator()` and `<` of the standard library**
+
+<br></br>
+
+## 6.47
+
+> Revise the program you wrote in the exercises in § 6.3.2 (p. 228) that used recursion to print the contents of a `vector` to conditionally print information about its execution. For example, you might print the size of the `vector` on each call. Compile and run the program with debugging turned on and again with it turned off.
+
+- SKIP
+
+<br></br>
+
+## 6.48
+
+> Explain what this loop does and whether it is a good use of `assert`:
+> ```cpp
+> string s;
+> while (cin >> s && s != sought) { } // empty body
+> assert(cin);
+> ```
+
+- not good. ~~Because `cin` is always null when break the `while()` loop~~ **There are two thing to let the control flow breaks the `while()` loop: the first is `cin` to be null and another is `s != sought`. The former happened by user's terminating, then program terminates by `assert()`, which is not reasonable**
+
+<br></br>
+
+## 6.49
+
+> What is a candidate function? What is a viable function?
+
+- SKIP
+
+<br></br>
+
+## 6.50
+
+> Given the declarations for f from page 242, list the viable
+functions, if any for each of the following calls. Indicate which function is the best match, or if the call is illegal whether there is no match or why the call is ambiguous.
+> (a) `f(2.56, 42)`
+> (b) `f(42)`
+> (c) `f(42, 0)`
+> (d) `f(2.56, 3.14)`
+
+- (a) illegal, ambiguous
+- (b) legal, call `void f(int);`
+- (c) legal, call `void f(int, int);`
+- (d) legal, call `void f(double, double = 3.14);`
+
+<br></br>
+
+## 6.51
+
+> Write all four versions of f. Each function should print a distinguishing message. Check your answers for the previous exercise. If your answers were incorrect, study this section until you understand why your answers were wrong.
+
+- SKIP
+
+<br></br>
+
+## 6.52
+
+> Given the following declarations,
+> ```cpp
+> void manip(int, int);
+> double dobj;
+> ```
+> what is the rank (§ 6.6.1, p. 245) of each conversion in the following calls?
+> (a) `manip('a', 'z');`
+> (b) `manip(55.4, dobj);`
+
+- (a) ~~level 4~~ **level 3**
+- (b) level 4
+
+<br></br>
+
+## 6.53
+
+> Explain the effect of the second declaration in each one of the following sets of declarations. Indicate which, if any, are illegal.
+> (a) `int calc(int&, int&);`
+>     `int calc(const int&, const int&);`
+> (b) `int calc(char*, char*);`
+>     `int calc(const char*, const char*);`
+> (c) `int calc(char*, char*);`
+>     `int calc(char* const, char* const);`
+
+<br></br>
+
+## 6.54
+
+> Write a declaration for a function that takes two `int` parameters and returns an `int`, and declare a `vector` whose elements have this function pointer type.
+
+```cpp
+int f(int, int);
+std::vector<int (*)(int, int) > v;
+```
+
+<br></br>
+
+## 6.55
+
+> Exercise 6.55: Write four functions that add, subtract, multiply, and divide two `int` values. Store pointers to these values in your `vector` from the previous exercise.
+
+```cpp
+int add(int a, int b) { return a + b; }
+int sub(int a, int b) { return a - b; }
+int mul(int a, int b) { return a * b; }
+int divi(int a, int b) { return a / b; }
+
+v.emplace_back(add);
+v.emplace_back(sub);
+v.emplace_back(mul);
+v.emplace_back(divi);
+```
+
+<br></br>
+
+## 6.56
+
+> Call each element in the `vector` and print their result.
+
+[run exer6-56.sh](./exer6-56.sh)
+
+<br></br>
+
+
