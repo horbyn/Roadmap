@@ -17,5 +17,10 @@
 ## Exers
 
 - [Chapter 1. Getting Started](Ch01/README.md)
+- [Chapter 2. Variables and Basic Types](Ch02/README.md)
+- [Chapter 3. Strings, Vectors, and Arrays](Ch03/README.md)
+- [Chapter 4. Expressions](Ch04/README.md)
+- [Chapter 5. Statements](Ch05/README.md)
+- [Chapter 6. Functions](Ch06/README.md)
 
 <br></br>
