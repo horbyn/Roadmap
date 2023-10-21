@@ -160,3 +160,152 @@ XXClass::XXClass(): xxmember_(/* .. */) {}
 - All are `private` because they need not to be sensed by user
 
 <br></br>
+
+## 7.20
+
+> When are friends useful? Discuss the pros and cons of using friends.
+
+- To let external object to access
+
+<br></br>
+
+## 7.21
+
+> Update your `Sales_data` class to hide its implementation. The programs you’ve written to use `Sales_data` operations should still continue to work. Recompile those programs with your new class definition to verify that they still work.
+
+- SKIP
+
+<br></br>
+
+## 7.22
+
+> Update your `Person` class to hide its implementation.
+
+[run exer7-15.sh](./exer7-15.sh)
+
+<br></br>
+
+## 7.23
+
+> Write your own version of the `Screen` class.
+
+```cpp
+class Screen {
+private:
+    size_t cursor_;
+    size_t height_;
+    size_t width_;
+    std::string contents_;
+};
+```
+
+<br></br>
+
+## 7.24
+
+> Give your Screen class three constructors: a default constructor; a constructor that takes values for height and width and initializes the contents to hold the given number of blanks; and a constructor that takes values for height, width, and a character to use as the contents of the screen.
+
+```cpp
+class Screen {
+private:
+    size_t cursor_;
+    size_t height_;
+    size_t width_;
+    std::string contents_;
+
+public:
+    Screen() {}
+    Screen(size_t h, size_t w) : cursor_(0), height_(h), width_(w), contents_(h * w, ' ') {}
+    Screen(size_t h, size_t w, const char ch) : cursor_(0), height_(h), width_(w), contents_(h * w, ch) {}
+};
+```
+
+<br></br>
+
+## 7.25
+
+> Can `Screen` safely rely on the default versions of copy and assignment? If so, why? If not, why not?
+
+- Yes, this version is not involve some type of dynamic resource allcation
+
+<br></br>
+
+## 7.26
+
+> Define `Sales_data::avg_price` as an `inline` function.
+
+```cpp
+inline double
+Sales_data::avg_price() {
+    /* .. */
+}
+```
+
+<br></br>
+
+## 7.27
+
+> Add the `move`, `set`, and `display` operations version of `Screen`. Test your class by executing the following code:
+> ```cpp
+> Screen myScreen(5, 5, 'X');
+> myScreen.move(4,0).set('#').display(cout);
+> cout << "\n";
+> myScreen.display(cout);
+> cout << "\n";
+> ```
+
+<br></br>
+
+## 7.28
+
+> What would happen in the previous exercise if the return type of `move`, `set`, and `display` was Screen rather than `Screen&`?
+
+- It is no effect to the original object
+
+<br></br>
+
+## 7.29
+
+> Revise your `Screen` class so that `move`, `set`, and `display` functions return `Screen` and check your prediction from the previous exercise.
+
+- SKIP
+
+<br></br>
+
+## 7.30
+
+> It is legal but redundant to refer to members through the `this` pointer. Discuss the pros and cons of explicitly using the `this` pointer to access members.
+
+- SKIP
+
+<br></br>
+
+## 7.31
+
+> Define a pair of classes X and Y, in which X has a pointer to Y, and Y has an object of type X.
+
+```cpp
+class Y;
+class X {
+    Y *y_;
+}
+class Y {
+    X x_;
+}
+```
+
+<br></br>
+
+## 7.32
+
+> Define your own versions of `Screen` and `Window_mgr` in which `clear` is a member of `Window_mgr` and a friend of `Screen`.
+
+```cpp
+void Window_mgr::clear();
+
+class Screen {
+    friend void Window_mgr::clear();
+};
+```
+
+<br></br>
